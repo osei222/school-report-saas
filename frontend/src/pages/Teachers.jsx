@@ -163,6 +163,11 @@ export default function Teachers() {
       setError('Hire date is required')
       return
     }
+
+    if (!form.employee_id?.trim()) {
+      setError('Employee ID is required')
+      return
+    }
     
     setLoading(true)
     try {
@@ -989,6 +994,225 @@ export default function Teachers() {
                       }}
                     />
                   </div>
+                </div>
+
+                {/* Employee ID */}
+                <div className="field">
+                  <label style={{
+                    display: 'block',
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
+                  }}>
+                    Employee ID <span style={{ color: '#ef4444' }}>*</span>
+                  </label>
+                  <div className="input-with-icon" style={{ position: 'relative' }}>
+                    <FaUserGraduate style={{
+                      position: 'absolute',
+                      left: isMobile ? 16 : 14,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#64748b',
+                      fontSize: isMobile ? 16 : 14,
+                      zIndex: 2
+                    }} />
+                    <input 
+                      type="text" 
+                      name="employee_id" 
+                      value={form.employee_id} 
+                      onChange={handleChange} 
+                      required
+                      placeholder="Enter employee ID"
+                      style={{
+                        width: '100%',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
+                        fontSize: isMobile ? 16 : 15,
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
+                        color: 'white',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Qualification */}
+                <div className="field">
+                  <label style={{
+                    display: 'block',
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
+                  }}>
+                    Qualification
+                  </label>
+                  <div className="input-with-icon" style={{ position: 'relative' }}>
+                    <FaGraduationCap style={{
+                      position: 'absolute',
+                      left: isMobile ? 16 : 14,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#64748b',
+                      fontSize: isMobile ? 16 : 14,
+                      zIndex: 2
+                    }} />
+                    <input 
+                      type="text" 
+                      name="qualification" 
+                      value={form.qualification} 
+                      onChange={handleChange} 
+                      placeholder="e.g., B.Ed, M.Sc Mathematics"
+                      style={{
+                        width: '100%',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
+                        fontSize: isMobile ? 16 : 15,
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
+                        color: 'white',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Experience Years */}
+                <div className="field">
+                  <label style={{
+                    display: 'block',
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
+                  }}>
+                    Experience (Years)
+                  </label>
+                  <div className="input-with-icon" style={{ position: 'relative' }}>
+                    <FaCalendarAlt style={{
+                      position: 'absolute',
+                      left: isMobile ? 16 : 14,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#64748b',
+                      fontSize: isMobile ? 16 : 14,
+                      zIndex: 2
+                    }} />
+                    <input 
+                      type="number" 
+                      name="experience_years" 
+                      value={form.experience_years} 
+                      onChange={handleChange} 
+                      min="0"
+                      max="50"
+                      placeholder="Years of experience"
+                      style={{
+                        width: '100%',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
+                        fontSize: isMobile ? 16 : 15,
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
+                        color: 'white',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Emergency Contact */}
+                <div className="field">
+                  <label style={{
+                    display: 'block',
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
+                  }}>
+                    Emergency Contact
+                  </label>
+                  <div className="input-with-icon" style={{ position: 'relative' }}>
+                    <FaPhone style={{
+                      position: 'absolute',
+                      left: isMobile ? 16 : 14,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#64748b',
+                      fontSize: isMobile ? 16 : 14,
+                      zIndex: 2
+                    }} />
+                    <input 
+                      type="tel" 
+                      name="emergency_contact" 
+                      value={form.emergency_contact} 
+                      onChange={handleChange} 
+                      placeholder="Emergency contact number"
+                      style={{
+                        width: '100%',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
+                        fontSize: isMobile ? 16 : 15,
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
+                        color: 'white',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Address */}
+                <div className="field" style={{ gridColumn: isMobile ? '1' : '1 / -1' }}>
+                  <label style={{
+                    display: 'block',
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
+                  }}>
+                    Address
+                  </label>
+                  <textarea 
+                    name="address" 
+                    value={form.address} 
+                    onChange={handleChange} 
+                    placeholder="Enter residential address"
+                    rows="3"
+                    style={{
+                      width: '100%',
+                      padding: isMobile ? '16px' : '12px',
+                      fontSize: isMobile ? 16 : 15,
+                      border: '2px solid rgba(71, 85, 105, 0.4)',
+                      borderRadius: isMobile ? 12 : 8,
+                      background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
+                      color: 'white',
+                      outline: 'none',
+                      transition: 'all 0.3s ease',
+                      minHeight: isMobile ? '80px' : '60px',
+                      boxSizing: 'border-box',
+                      fontFamily: 'inherit',
+                      resize: 'vertical'
+                    }}
+                  />
                 </div>
               </div>
               <div className="modal-actions" style={{
