@@ -26,6 +26,11 @@ export default function Students() {
   const [formErrors, setFormErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
 
+  // Responsive design constants
+  const isMobile = window.innerWidth <= 768
+  const isTablet = window.innerWidth <= 1024
+  const isSmallMobile = window.innerWidth <= 480
+
   const teacherClasses = useMemo(() => {
     if (user?.role !== 'TEACHER') return []
     return (classes || []).filter(c => String(c.class_teacher) === String(user.id))
@@ -162,29 +167,93 @@ export default function Students() {
   }
 
   return (
-    <div className="container">
-      <div className="mobile-card" style={{ marginBottom: '20px' }}>
-        <div className="page-header" style={{ marginBottom: 0 }}>
+    <div className="container" style={{
+      maxWidth: 1400,
+      margin: '0 auto',
+      padding: window.innerWidth <= 768 ? '20px 12px' : '24px 20px',
+      paddingTop: window.innerWidth <= 768 ? '90px' : '24px',
+      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+      minHeight: '100vh',
+      color: 'white'
+    }}>
+      <div className="mobile-card" style={{ 
+        marginBottom: '20px',
+        background: 'rgba(15, 23, 42, 0.8)',
+        backdropFilter: 'blur(16px)',
+        borderRadius: window.innerWidth <= 768 ? 16 : 20,
+        padding: window.innerWidth <= 768 ? '20px 16px' : '24px 20px',
+        border: '1px solid rgba(59, 130, 246, 0.2)',
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+      }}>
+        <div className="page-header" style={{ 
+          marginBottom: 0,
+          display: 'flex',
+          flexDirection: window.innerWidth <= 768 ? 'column' : 'row',
+          alignItems: window.innerWidth <= 768 ? 'flex-start' : 'center',
+          justifyContent: 'space-between',
+          gap: window.innerWidth <= 768 ? 16 : 12
+        }}>
           <h1 style={{
             display: 'flex', 
             alignItems: 'center', 
-            gap: 10, 
-            fontSize: window.innerWidth <= 640 ? '20px' : '26px',
-            margin: 0
+            gap: window.innerWidth <= 768 ? 12 : 16, 
+            fontSize: window.innerWidth <= 640 ? '20px' : window.innerWidth <= 768 ? '24px' : '28px',
+            margin: 0,
+            fontWeight: 700,
+            background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
           }}>
-            <FaUserGraduate color="#93c5fd" /> 
+            <div style={{
+              background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+              borderRadius: 12,
+              padding: window.innerWidth <= 768 ? '10px' : '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 8px 20px rgba(59, 130, 246, 0.4)'
+            }}>
+              <FaUserGraduate size={window.innerWidth <= 768 ? 18 : 22} color="white" />
+            </div>
             Students
+            <div style={{
+              fontSize: window.innerWidth <= 768 ? '12px' : '14px',
+              color: '#94a3b8',
+              fontWeight: 500,
+              marginLeft: window.innerWidth <= 768 ? 0 : 8
+            }}>
+              ({filtered.length} {filtered.length === 1 ? 'student' : 'students'})
+            </div>
           </h1>
-          <div className="actions" style={{ gap: window.innerWidth <= 640 ? '8px' : '12px' }}>
+          <div className="actions" style={{ 
+            gap: window.innerWidth <= 640 ? '12px' : '8px',
+            display: 'flex',
+            flexDirection: window.innerWidth <= 768 ? 'column' : 'row',
+            width: window.innerWidth <= 768 ? '100%' : 'auto'
+          }}>
             <button 
               className="btn primary quick-action-btn" 
               onClick={openAdd}
               style={{ 
-                minWidth: window.innerWidth <= 640 ? '100px' : 'auto',
-                fontSize: window.innerWidth <= 640 ? '14px' : '16px'
+                minWidth: window.innerWidth <= 640 ? '100%' : 'auto',
+                fontSize: window.innerWidth <= 640 ? '14px' : '16px',
+                padding: window.innerWidth <= 768 ? '14px 18px' : '12px 16px',
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                border: 'none',
+                borderRadius: 10,
+                color: 'white',
+                fontWeight: 600,
+                minHeight: window.innerWidth <= 768 ? 48 : 44,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                transition: 'all 0.3s ease'
               }}
             >
-              <FaPlus style={{marginRight: window.innerWidth <= 640 ? 4 : 6, verticalAlign:'-2px'}}/>
+              <FaPlus size={window.innerWidth <= 768 ? 16 : 14} />
               {window.innerWidth <= 640 ? 'Add' : 'Add Student'}
             </button>
             {user?.role !== 'TEACHER' && (
@@ -192,60 +261,171 @@ export default function Students() {
                 className="btn" 
                 onClick={() => setShowBulk(true)}
                 style={{ 
-                  fontSize: window.innerWidth <= 640 ? '14px' : '16px'
+                  fontSize: window.innerWidth <= 640 ? '14px' : '16px',
+                  padding: window.innerWidth <= 768 ? '14px 18px' : '12px 16px',
+                  background: 'rgba(59, 130, 246, 0.1)',
+                  border: '1px solid rgba(59, 130, 246, 0.3)',
+                  borderRadius: 10,
+                  color: '#60a5fa',
+                  fontWeight: 600,
+                  minHeight: window.innerWidth <= 768 ? 48 : 44,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  minWidth: window.innerWidth <= 640 ? '100%' : 'auto',
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <FaUpload style={{marginRight: window.innerWidth <= 640 ? 4 : 6, verticalAlign:'-2px'}}/>
+                <FaUpload size={window.innerWidth <= 768 ? 16 : 14} />
                 {window.innerWidth <= 640 ? 'Bulk' : 'Bulk Upload'}
               </button>
             )}
           </div>
         </div>
       </div>
-      <div className="toolbar" style={{gap:12, flexWrap: 'wrap'}}>
-        <div className="input-with-icon" style={{ minWidth: window.innerWidth <= 640 ? '100%' : 280 }}>
-          <FaSearch className="input-icon" />
+      <div className="toolbar" style={{
+        gap: 12, 
+        flexWrap: 'wrap',
+        background: 'rgba(15, 23, 42, 0.6)',
+        backdropFilter: 'blur(12px)',
+        borderRadius: window.innerWidth <= 768 ? 12 : 16,
+        padding: window.innerWidth <= 768 ? '16px 12px' : '20px 16px',
+        marginBottom: window.innerWidth <= 768 ? 20 : 24,
+        border: '1px solid rgba(71, 85, 105, 0.3)',
+        display: 'flex',
+        flexDirection: window.innerWidth <= 768 ? 'column' : 'row',
+        alignItems: window.innerWidth <= 768 ? 'stretch' : 'center'
+      }}>
+        <div className="input-with-icon" style={{ 
+          minWidth: window.innerWidth <= 640 ? '100%' : 280,
+          position: 'relative',
+          flex: window.innerWidth <= 768 ? 'none' : 1,
+          maxWidth: window.innerWidth <= 768 ? '100%' : 400
+        }}>
+          <FaSearch style={{
+            position: 'absolute',
+            left: 14,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            color: '#64748b',
+            fontSize: 14,
+            zIndex: 2
+          }} />
           <input
-            placeholder="Search by name, ID or class"
+            placeholder={window.innerWidth <= 640 ? "Search students..." : "Search by name, ID or class"}
             value={query}
             onChange={e=>setQuery(e.target.value)}
-            style={{ padding: '12px 12px 12px 34px', fontSize: 16 }}
+            style={{ 
+              width: '100%',
+              padding: window.innerWidth <= 768 ? '16px 16px 16px 44px' : '14px 14px 14px 42px',
+              fontSize: 16,
+              border: '1px solid rgba(71, 85, 105, 0.3)',
+              borderRadius: 10,
+              background: 'rgba(30, 41, 59, 0.8)',
+              color: 'white',
+              outline: 'none',
+              transition: 'all 0.3s ease',
+              fontWeight: 500
+            }}
           />
         </div>
-        <ScrollableSelect
-          value={classFilter}
-          onChange={(v)=>{ setClassFilter(v); setLoading(true) }}
-          disabled={user?.role==='TEACHER'}
-          options={[{value:'',label:'All classes'}, ...classes.map(c=>({
-            value:String(c.id),
-            label:`${c.level_display || c.level}${c.section?` ${c.section}`:''}`
-          }))]}
-          sizeThreshold={10}
-        />
-        <button className="btn" onClick={()=>{setLoading(true); load()}} style={{ minHeight: 44 }}><FaSync style={{marginRight:6, verticalAlign:'-2px'}}/>Refresh</button>
+        <div style={{
+          display: 'flex',
+          flexDirection: window.innerWidth <= 768 ? 'column' : 'row',
+          gap: window.innerWidth <= 768 ? 12 : 8,
+          flex: window.innerWidth <= 768 ? 'none' : 'initial',
+          width: window.innerWidth <= 768 ? '100%' : 'auto'
+        }}>
+          <ScrollableSelect
+            value={classFilter}
+            onChange={(v)=>{ setClassFilter(v); setLoading(true) }}
+            disabled={user?.role==='TEACHER'}
+            options={[{value:'',label:'All classes'}, ...classes.map(c=>({
+              value:String(c.id),
+              label:`${c.level_display || c.level}${c.section?` ${c.section}`:''}`
+            }))]}
+            sizeThreshold={10}
+            style={{
+              minWidth: window.innerWidth <= 768 ? '100%' : 160,
+              height: window.innerWidth <= 768 ? 48 : 44
+            }}
+          />
+          <button 
+            className="btn" 
+            onClick={()=>{setLoading(true); load()}} 
+            style={{ 
+              minHeight: window.innerWidth <= 768 ? 48 : 44,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: window.innerWidth <= 768 ? '16px 18px' : '12px 16px',
+              background: 'rgba(59, 130, 246, 0.1)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              borderRadius: 10,
+              color: '#60a5fa',
+              fontWeight: 600,
+              fontSize: window.innerWidth <= 768 ? 14 : 15,
+              justifyContent: 'center',
+              width: window.innerWidth <= 768 ? '100%' : 'auto',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <FaSync size={window.innerWidth <= 768 ? 16 : 14} />
+            Refresh
+          </button>
+        </div>
       </div>
       {user?.role==='TEACHER' && classFilter && (
-        <div className="muted" style={{marginTop: -6, marginBottom: 10}}>You are viewing students in your class only.</div>
+        <div style={{
+          marginTop: -6, 
+          marginBottom: 16,
+          color: '#94a3b8',
+          fontSize: window.innerWidth <= 768 ? 13 : 14,
+          fontStyle: 'italic',
+          background: 'rgba(59, 130, 246, 0.1)',
+          padding: '8px 12px',
+          borderRadius: 8,
+          border: '1px solid rgba(59, 130, 246, 0.2)'
+        }}>
+          📚 You are viewing students in your class only.
+        </div>
       )}
-      {error && <div className="alert">{error}</div>}
-      <div style={{
-        background: 'white',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        border: '1px solid #e5e7eb',
-        marginBottom: '20px'
-      }}>
-        <div style={{ overflowX: 'auto', maxHeight: '70vh', overflowY: 'auto' }}>
-          <table className="table" style={{ margin: 0, borderCollapse: 'separate', borderSpacing: 0 }}>
-            <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
-              <tr style={{ background: 'linear-gradient(135deg, #374151, #4b5563)' }}>
-                <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'left', borderBottom: '2px solid #6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>ID</th>
-                <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'left', borderBottom: '2px solid #6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Name</th>
-                <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'center', borderBottom: '2px solid #6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Class</th>
-                <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'center', borderBottom: '2px solid #6b7280', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Gender</th>
-              </tr>
-            </thead>
+      {error && (
+        <div style={{
+          background: 'rgba(239, 68, 68, 0.1)',
+          border: '1px solid rgba(239, 68, 68, 0.3)',
+          borderRadius: 10,
+          padding: '12px 16px',
+          marginBottom: 20,
+          color: '#fca5a5',
+          fontSize: 14
+        }}>
+          ⚠️ {error}
+        </div>
+      )}
+      
+      {/* Desktop Table View */}
+      {window.innerWidth > 768 && (
+        <div style={{
+          background: 'rgba(15, 23, 42, 0.8)',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+          border: '1px solid rgba(71, 85, 105, 0.3)',
+          marginBottom: '24px',
+          backdropFilter: 'blur(12px)'
+        }}>
+          <div style={{ overflowX: 'auto', maxHeight: '70vh', overflowY: 'auto' }}>
+            <table className="table" style={{ margin: 0, borderCollapse: 'separate', borderSpacing: 0 }}>
+              <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
+                <tr style={{ background: 'linear-gradient(135deg, #1e293b, #334155)' }}>
+                  <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'left', borderBottom: '2px solid #475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>ID</th>
+                  <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'left', borderBottom: '2px solid #475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Name</th>
+                  <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'center', borderBottom: '2px solid #475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Class</th>
+                  <th style={{ padding: '16px 12px', color: 'white', fontWeight: '600', fontSize: '13px', textAlign: 'center', borderBottom: '2px solid #475569', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Gender</th>
+                </tr>
+              </thead>
             <tbody>
               {filtered.map((s, index) => (
                 <tr 
