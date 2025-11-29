@@ -48,11 +48,20 @@ export default function Teachers() {
   const [subjects, setSubjects] = useState([])
   const [selectedTeacher, setSelectedTeacher] = useState(null)
   const [showSchedule, setShowSchedule] = useState(false)
+  
+  // Dynamic responsive state with resize listener
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Responsive design constants
-  const isMobile = window.innerWidth <= 768
-  const isTablet = window.innerWidth <= 1024
-  const isSmallMobile = window.innerWidth <= 480
+  const isMobile = windowWidth <= 768
+  const isTablet = windowWidth <= 1024
+  const isSmallMobile = windowWidth <= 480
 
   const load = async () => {
     try {
@@ -153,15 +162,49 @@ export default function Teachers() {
   }
 
   return (
-    <div className="container" style={{
-      maxWidth: 1400,
-      margin: '0 auto',
-      padding: isMobile ? '20px 12px' : isTablet ? '24px 16px' : '32px 20px',
-      paddingTop: isMobile ? '90px' : '24px',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-      minHeight: '100vh',
-      color: 'white'
-    }}>
+    <div 
+      className="container" 
+      style={{
+        maxWidth: 1400,
+        margin: '0 auto',
+        padding: isMobile ? '20px 12px' : isTablet ? '24px 16px' : '32px 20px',
+        paddingTop: isMobile ? '90px' : '24px',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+        minHeight: '100vh',
+        color: 'white',
+        width: '100%',
+        boxSizing: 'border-box'
+      }}
+    >
+      {/* Add mobile-specific style injection */}
+      {isMobile && (
+        <style>
+          {`
+            @media screen and (max-width: 768px) {
+              .container { 
+                padding: 20px 12px !important; 
+                padding-top: 90px !important; 
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+                color: white !important;
+              }
+              .page-header { 
+                flex-direction: column !important; 
+                background: rgba(15, 23, 42, 0.8) !important;
+                border-radius: 16px !important;
+                padding: 20px 16px !important;
+                gap: 16px !important;
+              }
+              .btn { 
+                width: 100% !important; 
+                min-height: 48px !important;
+                font-size: 16px !important;
+                margin-bottom: 12px !important;
+              }
+              table { display: none !important; }
+            }
+          `}
+        </style>
+      )}
       {/* Enhanced Header with Mobile-First Design */}
       <div className="page-header" style={{
         background: 'rgba(15, 23, 42, 0.8)',

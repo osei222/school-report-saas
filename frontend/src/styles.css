@@ -737,7 +737,132 @@ input.error:focus, select.error:focus, textarea.error:focus {
 	input, select { min-height: 44px; font-size: 16px; }
 }
 
+/* Enhanced Mobile Responsiveness for Teachers Page */
+@media (max-width: 768px) {
+  .page, .container {
+    padding: 20px 12px !important;
+    padding-top: 90px !important;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    min-height: 100vh !important;
+    color: white !important;
+  }
+  
+  .page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(16px) !important;
+    border-radius: 16px !important;
+    padding: 20px 16px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid rgba(34, 197, 94, 0.2) !important;
+  }
+  
+  .page-header .actions {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+  
+  .page-header .actions .btn {
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 14px 18px !important;
+    font-size: 14px !important;
+    justify-content: center !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  
+  .modal {
+    padding: 10px !important;
+  }
+  
+  .modal-content {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: 90vh !important;
+    border-radius: 12px !important;
+  }
+  
+  .card, .tile {
+    border-radius: 16px !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(71, 85, 105, 0.3) !important;
+  }
+}
+
 /* Enhanced Mobile Styles for Smartphone Access */
+@media screen and (max-width: 768px) {
+  /* Force mobile layout */
+  * {
+    box-sizing: border-box !important;
+  }
+  
+  html, body {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -webkit-font-smoothing: antialiased !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Global page styling for mobile */
+  .page, .container, #root > div {
+    padding: 20px 12px !important;
+    padding-top: 90px !important;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    min-height: 100vh !important;
+    color: white !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Teacher page specific mobile fixes */
+  .page-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(16px) !important;
+    border-radius: 16px !important;
+    padding: 20px 16px !important;
+    margin-bottom: 20px !important;
+    border: 1px solid rgba(34, 197, 94, 0.2) !important;
+    width: 100% !important;
+  }
+  
+  /* Force button mobile styling */
+  .btn, button {
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 14px 18px !important;
+    font-size: 16px !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  /* Table hiding for mobile */
+  table, .table, thead, tbody, tr, td, th {
+    display: none !important;
+  }
+  
+  /* Force card layout */
+  .card {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid rgba(71, 85, 105, 0.3) !important;
+    border-radius: 16px !important;
+    padding: 20px 16px !important;
+    margin-bottom: 16px !important;
+    backdrop-filter: blur(12px) !important;
+  }
+}
 
 /* Full-width container variants */
 .container.full { max-width: 100%; }
