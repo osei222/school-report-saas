@@ -31,6 +31,28 @@ export default function Students() {
   const isTablet = window.innerWidth <= 1024
   const isSmallMobile = window.innerWidth <= 480
 
+  // Prevent body scroll when modal is open on mobile
+  useEffect(() => {
+    if (showAdd && window.innerWidth <= 768) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.height = '100%'
+    } else {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+      document.body.style.height = ''
+    }
+    
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+      document.body.style.height = ''
+    }
+  }, [showAdd])
+
   const teacherClasses = useMemo(() => {
     if (user?.role !== 'TEACHER') return []
     return (classes || []).filter(c => String(c.class_teacher) === String(user.id))
@@ -171,7 +193,7 @@ export default function Students() {
       maxWidth: 1400,
       margin: '0 auto',
       padding: window.innerWidth <= 768 ? '20px 12px' : '24px 20px',
-      paddingTop: window.innerWidth <= 768 ? '90px' : '24px',
+      paddingTop: window.innerWidth <= 768 ? '100px' : '24px',
       background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
       minHeight: '100vh',
       color: 'white'
@@ -553,15 +575,42 @@ export default function Students() {
 
       {/* Add Student Modal */}
       {showAdd && (
-        <div className="modal" onClick={() => setShowAdd(false)}>
+        <div 
+          className="modal" 
+          onClick={() => setShowAdd(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: window.innerWidth <= 768 ? 'flex-start' : 'center',
+            justifyContent: 'center',
+            padding: window.innerWidth <= 768 ? '0' : '16px',
+            background: 'rgba(0, 0, 0, 0.8)',
+            backdropFilter: 'blur(12px)',
+            overflow: 'hidden'
+          }}
+        >
           <div 
             className="modal-content" 
             onClick={(e) => e.stopPropagation()}
             style={{
-              maxHeight: '90vh',
+              width: window.innerWidth <= 768 ? '100vw' : '90%',
+              height: window.innerWidth <= 768 ? '100vh' : 'auto',
+              maxWidth: window.innerWidth <= 768 ? 'none' : '800px',
+              maxHeight: window.innerWidth <= 768 ? '100vh' : '90vh',
+              background: window.innerWidth <= 768 ? 'rgba(15, 23, 42, 1)' : 'rgba(15, 23, 42, 0.95)',
+              border: window.innerWidth <= 768 ? 'none' : '1px solid rgba(59, 130, 246, 0.3)',
+              borderRadius: window.innerWidth <= 768 ? 0 : 12,
+              backdropFilter: 'blur(20px)',
+              color: 'white',
+              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
-              overflow: 'hidden'
+              position: 'relative'
             }}
           >
             <div 
@@ -570,40 +619,44 @@ export default function Students() {
                 flexShrink: 0,
                 background: 'linear-gradient(135deg, #059669, #047857)',
                 color: 'white',
-                padding: '20px 24px',
-                margin: '-20px -24px 0 -24px',
-                borderRadius: '12px 12px 0 0',
+                padding: window.innerWidth <= 768 ? '20px 20px 16px' : '20px 24px',
+                margin: window.innerWidth <= 768 ? '0' : '-20px -24px 0 -24px',
+                borderRadius: window.innerWidth <= 768 ? 0 : '12px 12px 0 0',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                boxShadow: '0 2px 8px rgba(5, 150, 105, 0.3)'
+                boxShadow: '0 2px 8px rgba(5, 150, 105, 0.3)',
+                position: window.innerWidth <= 768 ? 'sticky' : 'static',
+                top: 0,
+                zIndex: 10
               }}
             >
               <h3 style={{
                 margin: 0, 
-                fontSize: '20px', 
+                fontSize: window.innerWidth <= 768 ? '18px' : '20px', 
                 fontWeight: '700',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px'
               }}>
-                <FaUserGraduate style={{fontSize: '22px'}}/>
+                <FaUserGraduate style={{fontSize: window.innerWidth <= 768 ? '18px' : '22px'}}/>
                 Add New Student
               </h3>
               <button 
                 onClick={() => setShowAdd(false)}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: 'none',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '2px solid rgba(255, 255, 255, 0.2)',
                   color: 'white',
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '8px',
+                  width: window.innerWidth <= 768 ? '40px' : '36px',
+                  height: window.innerWidth <= 768 ? '40px' : '36px',
+                  borderRadius: window.innerWidth <= 768 ? '10px' : '8px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  fontSize: '18px'
+                  fontSize: window.innerWidth <= 768 ? '16px' : '18px',
+                  transition: 'all 0.3s ease'
                 }}
               >
                 <FaTimes/>
@@ -614,8 +667,14 @@ export default function Students() {
               style={{
                 flex: 1,
                 overflowY: 'auto',
-                padding: '20px 24px',
-                margin: '0 -24px'
+                overflowX: 'hidden',
+                padding: window.innerWidth <= 768 ? '16px 20px' : '20px 24px',
+                margin: window.innerWidth <= 768 ? '0' : '0 -24px',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(59, 130, 246, 0.3) transparent',
+                scrollBehavior: 'smooth',
+                height: window.innerWidth <= 768 ? 'calc(100vh - 120px)' : 'auto'
               }}
             >
               <form onSubmit={async (e) => {
