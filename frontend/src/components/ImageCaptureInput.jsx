@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 
-export default function ImageCaptureInput({ label = 'Photo', onChange, maxWidth = 800, quality = 0.8 }) {
-  const inputRef = useRef(null)
+export default function ImageCaptureInput({ label = 'Photo', onChange, maxWidth = 800, quality = 0.8, showBothOptions = false }) {
+  const fileInputRef = useRef(null)
+  const cameraInputRef = useRef(null)
   const [preview, setPreview] = useState(null)
   const [busy, setBusy] = useState(false)
 
@@ -21,7 +22,8 @@ export default function ImageCaptureInput({ label = 'Photo', onChange, maxWidth 
     }
   }
 
-  const onInput = (e) => handleFile(e.target.files?.[0])
+  const onFileInput = (e) => handleFile(e.target.files?.[0])
+  const onCameraInput = (e) => handleFile(e.target.files?.[0])
 
   return (
     <div style={{ width: '100%' }}>
@@ -33,43 +35,106 @@ export default function ImageCaptureInput({ label = 'Photo', onChange, maxWidth 
         gap: 16,
         width: '100%'
       }}>
-        <button 
-          type="button" 
-          onClick={() => inputRef.current?.click()} 
-          disabled={busy}
-          style={{
-            background: busy ? '#9ca3af' : 'linear-gradient(135deg, #3b82f6, #2563eb)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '10px',
-            padding: '14px 24px',
-            fontSize: '14px',
-            fontWeight: '600',
-            cursor: busy ? 'not-allowed' : 'pointer',
+        {showBothOptions ? (
+          // Show separate buttons for capture and upload
+          <div style={{
             display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            minWidth: '160px',
-            justifyContent: 'center',
-            boxShadow: busy ? 'none' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            transition: 'all 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            if (!busy) {
-              e.target.style.transform = 'translateY(-1px)'
-              e.target.style.boxShadow = '0 6px 12px -2px rgba(0, 0, 0, 0.15)'
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!busy) {
-              e.target.style.transform = 'translateY(0)'
-              e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-            }
-          }}
-        >
-          <span style={{ fontSize: '16px' }}>📷</span>
-          {busy ? 'Processing...' : 'Capture / Upload'}
-        </button>
+            gap: '12px',
+            flexWrap: 'wrap',
+            justifyContent: 'center'
+          }}>
+            <button 
+              type="button" 
+              onClick={() => cameraInputRef.current?.click()} 
+              disabled={busy}
+              style={{
+                background: busy ? '#9ca3af' : 'linear-gradient(135deg, #22c55e, #16a34a)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                padding: '12px 20px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: busy ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                minWidth: '140px',
+                justifyContent: 'center',
+                boxShadow: busy ? 'none' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>📷</span>
+              {busy ? 'Processing...' : 'Capture'}
+            </button>
+            
+            <button 
+              type="button" 
+              onClick={() => fileInputRef.current?.click()} 
+              disabled={busy}
+              style={{
+                background: busy ? '#9ca3af' : 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                padding: '12px 20px',
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: busy ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                minWidth: '140px',
+                justifyContent: 'center',
+                boxShadow: busy ? 'none' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>📁</span>
+              {busy ? 'Processing...' : 'Upload'}
+            </button>
+          </div>
+        ) : (
+          // Single button for capture/upload (original behavior)
+          <button 
+            type="button" 
+            onClick={() => fileInputRef.current?.click()} 
+            disabled={busy}
+            style={{
+              background: busy ? '#9ca3af' : 'linear-gradient(135deg, #3b82f6, #2563eb)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              padding: '14px 24px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: busy ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              minWidth: '160px',
+              justifyContent: 'center',
+              boxShadow: busy ? 'none' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              if (!busy) {
+                e.target.style.transform = 'translateY(-1px)'
+                e.target.style.boxShadow = '0 6px 12px -2px rgba(0, 0, 0, 0.15)'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!busy) {
+                e.target.style.transform = 'translateY(0)'
+                e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+              }
+            }}
+          >
+            <span style={{ fontSize: '16px' }}>📷</span>
+            {busy ? 'Processing...' : 'Capture / Upload'}
+          </button>
+        )}
         
         {preview && (
           <div style={{
@@ -102,14 +167,25 @@ export default function ImageCaptureInput({ label = 'Photo', onChange, maxWidth 
           </div>
         )}
       </div>
+      
+      {/* Hidden file inputs */}
       <input
-        ref={inputRef}
+        ref={fileInputRef}
         type="file"
         accept="image/*"
-        capture="environment"
         style={{ display:'none' }}
-        onChange={onInput}
+        onChange={onFileInput}
       />
+      {showBothOptions && (
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          style={{ display:'none' }}
+          onChange={onCameraInput}
+        />
+      )}
     </div>
   )
 }

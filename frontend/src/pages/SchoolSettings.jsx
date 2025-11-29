@@ -402,6 +402,7 @@ export default function SchoolSettings() {
                 onChange={handleLogoChange}
                 maxWidth={400}
                 quality={0.9}
+                showBothOptions={true}
               />
               <p style={{
                 margin: '8px 0 0 0',
