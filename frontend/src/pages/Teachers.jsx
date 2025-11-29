@@ -21,7 +21,8 @@ export default function Teachers() {
     experience_years: 0,
     emergency_contact: '',
     address: '',
-    specializations: []
+    specializations: [],
+    class_id: ''
   })
   const [studentForm, setStudentForm] = useState({
     student_id: '', 
@@ -142,7 +143,8 @@ export default function Teachers() {
       experience_years: 0,
       emergency_contact: '',
       address: '',
-      specializations: []
+      specializations: [],
+      class_id: ''
     })
   }
 
