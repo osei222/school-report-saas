@@ -1,15 +1,20 @@
-/assets/*
-  Content-Type: application/javascript
-  Cache-Control: public, max-age=31536000, immutable
-
-*.js
+/assets/*.js
   Content-Type: application/javascript
 
-*.mjs
-  Content-Type: application/javascript
-
-*.css
+/assets/*.css
   Content-Type: text/css
+
+/assets/*.mjs
+  Content-Type: application/javascript
+
+/*.js
+  Content-Type: application/javascript
+
+/*.css
+  Content-Type: text/css
+
+/*.mjs
+  Content-Type: application/javascript
 
 /*
   X-Frame-Options: DENY
