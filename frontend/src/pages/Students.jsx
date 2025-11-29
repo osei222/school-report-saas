@@ -483,7 +483,17 @@ export default function Students() {
           </table>
         </div>
       </div>
-      <div className="student-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', marginTop: '20px' }}>
+      )}
+      
+      <div 
+        className="student-cards" 
+        style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+          gap: '16px', 
+          marginTop: '20px' 
+        }}
+      >
         {filtered.map(s => (
           <div 
             className="student-card" 
