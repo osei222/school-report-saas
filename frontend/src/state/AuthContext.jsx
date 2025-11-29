@@ -11,6 +11,56 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem('sr_token'))
   const [loading, setLoading] = useState(false)
 
+  const refreshToken = async () => {
+    try {
+      const refreshTokenValue = localStorage.getItem('sr_refresh')
+      if (!refreshTokenValue) {
+        logout()
+        return false
+      }
+      
+      const res = await api.post('/auth/token/refresh/', { refresh: refreshTokenValue })
+      const { access } = res.data
+      
+      setToken(access)
+      localStorage.setItem('sr_token', access)
+      api.defaults.headers.common['Authorization'] = `Bearer ${access}`
+      
+      return true
+    } catch (err) {
+      console.warn('Token refresh failed:', err)
+      logout()
+      return false
+    }
+  }
+
+  const logout = () => {
+    setToken(null)
+    setUser(null)
+    localStorage.removeItem('sr_token')
+    localStorage.removeItem('sr_refresh')
+    localStorage.removeItem('sr_user')
+  }
+
+  // Check token validity on load
+  useEffect(() => {
+    const checkToken = async () => {
+      const savedToken = localStorage.getItem('sr_token')
+      if (savedToken) {
+        try {
+          // Try a simple API call to verify token
+          await api.get('/auth/user/')
+        } catch (error) {
+          if (error.response?.status === 401) {
+            console.log('Token expired, attempting refresh...')
+            await refreshToken()
+          }
+        }
+      }
+    }
+    checkToken()
+  }, [])
+
   useEffect(() => {
     if (token) {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -38,13 +88,7 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const logout = () => {
-    setToken(null)
-    setUser(null)
-    localStorage.removeItem('sr_token')
-    localStorage.removeItem('sr_refresh')
-    localStorage.removeItem('sr_user')
-  }
+
 
   const registerSchool = async ({ school_name, admin_email, password, password_confirm, levels = ['BOTH'], first_name = 'Admin', last_name = 'User' }) => {
     setLoading(true)
@@ -65,7 +109,7 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const value = useMemo(() => ({ user, token, login, logout, registerSchool, loading }), [user, token, loading])
+  const value = useMemo(() => ({ user, token, login, logout, registerSchool, refreshToken, loading }), [user, token, loading])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

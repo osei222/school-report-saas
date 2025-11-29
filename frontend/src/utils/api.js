@@ -45,21 +45,51 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (res) => res,
-  (error) => {
+  async (error) => {
     // Handle 401 authentication errors specifically
-    if (error.response?.status === 401) {
-      console.warn('Authentication failed - redirecting to login')
-      const currentToken = localStorage.getItem('sr_token')
-      if (currentToken) {
-        console.warn('Token exists but was rejected by server')
-        // Clear invalid token
+    if (error.response?.status === 401 && !error.config?._retry) {
+      console.warn('Authentication failed - attempting token refresh')
+      
+      const refreshToken = localStorage.getItem('sr_refresh')
+      if (refreshToken && !error.config.url?.includes('/auth/token/refresh/')) {
+        try {
+          // Mark this request as retried to prevent loops
+          error.config._retry = true
+          
+          // Attempt to refresh token
+          const refreshRes = await api.post('/auth/token/refresh/', { refresh: refreshToken })
+          const { access } = refreshRes.data
+          
+          // Update token in localStorage and headers
+          localStorage.setItem('sr_token', access)
+          api.defaults.headers.common['Authorization'] = `Bearer ${access}`
+          error.config.headers.Authorization = `Bearer ${access}`
+          
+          console.log('Token refreshed successfully')
+          
+          // Retry the original request
+          return api.request(error.config)
+        } catch (refreshError) {
+          console.warn('Token refresh failed, clearing auth data')
+          localStorage.removeItem('sr_token')
+          localStorage.removeItem('sr_refresh')
+          localStorage.removeItem('sr_user')
+          
+          // Don't auto-redirect on mobile to prevent loops
+          if (window.innerWidth > 768 && !window.location.pathname.includes('/login')) {
+            window.location.href = '/login'
+          }
+        }
+      } else {
+        console.warn('No refresh token available, clearing auth data')
         localStorage.removeItem('sr_token')
         localStorage.removeItem('sr_refresh')
         localStorage.removeItem('sr_user')
-      }
-      // Don't auto-redirect on mobile to prevent loops
-      if (window.innerWidth > 768 && !window.location.pathname.includes('/login')) {
-        window.location.href = '/login'
+        
+        // Don't auto-redirect on mobile to prevent loops
+        if (window.innerWidth > 768 && !window.location.pathname.includes('/login')) {
+          window.location.href = '/login'
+        }
       }
     }
     
