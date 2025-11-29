@@ -18,7 +18,7 @@ if (explicit) {
   }
 } else {
   // Production mode - will be set via environment variable
-  base = import.meta.env.VITE_API_BASE || 'https://your-render-app.onrender.com/api'
+  base = import.meta.env.VITE_API_BASE || 'https://school-report-saas.onrender.com/api'
 }
 
 const api = axios.create({ baseURL: base })
