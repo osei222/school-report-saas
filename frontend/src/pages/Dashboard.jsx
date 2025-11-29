@@ -642,83 +642,103 @@ export default function Dashboard() {
     )
   }
 
+  const isMobile = window.innerWidth <= 768
+  const isTablet = window.innerWidth <= 1024
+
   return (
-    <div className="container" style={{ maxWidth: 1400, margin: '0 auto' }}>
+    <div style={{ 
+      maxWidth: 1400, 
+      margin: '0 auto',
+      padding: isMobile ? '0 16px' : isTablet ? '0 20px' : '0 24px'
+    }}>
       {/* Admin Hero Section */}
       <div style={{
         background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #93c5fd 100%)',
-        borderRadius: 20,
-        padding: window.innerWidth <= 640 ? '28px 20px' : '40px 48px',
-        marginBottom: 32,
+        borderRadius: isMobile ? 16 : 20,
+        padding: isMobile ? '24px 20px' : isTablet ? '32px 28px' : '40px 48px',
+        marginBottom: isMobile ? 20 : 32,
         boxShadow: '0 20px 60px -15px rgba(59, 130, 246, 0.4)',
         position: 'relative',
         overflow: 'hidden'
       }}>
-        {/* Decorative elements */}
+        {/* Decorative elements - scaled for mobile */}
         <div style={{
           position: 'absolute',
-          top: -40,
-          right: -40,
-          width: 180,
-          height: 180,
+          top: isMobile ? -20 : -40,
+          right: isMobile ? -20 : -40,
+          width: isMobile ? 120 : 180,
+          height: isMobile ? 120 : 180,
           background: 'rgba(255,255,255,0.1)',
           borderRadius: '50%',
           filter: 'blur(40px)'
         }} />
         <div style={{
           position: 'absolute',
-          bottom: -20,
-          left: -20,
-          width: 120,
-          height: 120,
+          bottom: isMobile ? -10 : -20,
+          left: isMobile ? -10 : -20,
+          width: isMobile ? 80 : 120,
+          height: isMobile ? 80 : 120,
           background: 'rgba(255,255,255,0.08)',
           borderRadius: '50%',
           filter: 'blur(30px)'
         }} />
         
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: 20, flexDirection: window.innerWidth <= 640 ? 'column' : 'row', alignItems: window.innerWidth <= 640 ? 'flex-start' : 'center' }}>
+        <div style={{ 
+          position: 'relative', 
+          zIndex: 1, 
+          display: 'flex', 
+          gap: isMobile ? 16 : 20, 
+          flexDirection: isMobile ? 'column' : 'row', 
+          alignItems: isMobile ? 'flex-start' : 'center',
+          textAlign: isMobile ? 'left' : 'left'
+        }}>
           <div style={{
-            width: 80,
-            height: 80,
+            width: isMobile ? 64 : 80,
+            height: isMobile ? 64 : 80,
             background: 'rgba(255,255,255,0.25)',
             backdropFilter: 'blur(10px)',
-            borderRadius: 20,
+            borderRadius: isMobile ? 16 : 20,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+            boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+            flexShrink: 0
           }}>
-            <FaUsers style={{ fontSize: 36, color: 'white' }} />
+            <FaUsers style={{ fontSize: isMobile ? 28 : 36, color: 'white' }} />
           </div>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <h1 style={{ 
               margin: 0, 
-              fontSize: window.innerWidth <= 640 ? 28 : 36, 
+              fontSize: isMobile ? 24 : isTablet ? 32 : 36, 
               fontWeight: 800, 
               color: 'white',
-              letterSpacing: '-0.02em'
+              letterSpacing: '-0.02em',
+              lineHeight: 1.2
             }}>
               Welcome, {user.first_name}!
             </h1>
-            <p style={{ 
-              margin: '12px 0 0', 
-              fontSize: 16, 
-              color: 'rgba(255,255,255,0.95)',
-              fontWeight: 500,
+            <div style={{ 
+              margin: isMobile ? '8px 0 0' : '12px 0 0',
               display: 'flex',
               alignItems: 'center',
-              gap: 8
+              gap: 8,
+              flexWrap: 'wrap'
             }}>
               <span style={{ 
                 background: 'rgba(255,255,255,0.2)', 
-                padding: '4px 12px', 
+                padding: isMobile ? '6px 12px' : '8px 16px', 
                 borderRadius: 20,
-                fontSize: 14,
-                fontWeight: 600
+                fontSize: isMobile ? 12 : 14,
+                fontWeight: 600,
+                color: 'rgba(255,255,255,0.95)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                backdropFilter: 'blur(10px)'
               }}>
                 {user.role === 'SCHOOL_ADMIN' ? '🏫 School Administrator' : '👔 Principal'}
               </span>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -742,154 +762,254 @@ export default function Dashboard() {
           {/* Overview Stats Cards */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth <= 640 ? '1fr' : window.innerWidth <= 968 ? '1fr 1fr' : 'repeat(4, 1fr)',
-            gap: 20,
-            marginBottom: 32
+            gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(4, 1fr)',
+            gap: isMobile ? 16 : 20,
+            marginBottom: isMobile ? 20 : 32
           }}>
             <div style={{
               background: 'white',
-              borderRadius: 16,
-              padding: 24,
+              borderRadius: isMobile ? 12 : 16,
+              padding: isMobile ? '20px 16px' : isTablet ? '20px' : '24px',
               boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
               border: '1px solid #e5e7eb',
               transition: 'all 0.3s ease',
               cursor: 'default'
             }}
               onMouseEnter={e => {
-                e.currentTarget.style.boxShadow = '0 10px 40px rgba(59,130,246,0.15)'
-                e.currentTarget.style.transform = 'translateY(-4px)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 10px 40px rgba(59,130,246,0.15)'
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                }
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
-                e.currentTarget.style.transform = 'translateY(0)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: isMobile ? 'flex-start' : 'center', 
+                gap: isMobile ? 12 : 16, 
+                marginBottom: isMobile ? 8 : 12,
+                flexDirection: isMobile ? 'column' : 'row',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 12,
+                  width: isMobile ? 44 : 48,
+                  height: isMobile ? 44 : 48,
+                  borderRadius: isMobile ? 10 : 12,
                   background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  alignSelf: isMobile ? 'center' : 'flex-start'
                 }}>
-                  <FaUserGraduate style={{ fontSize: 22, color: 'white' }} />
+                  <FaUserGraduate style={{ fontSize: isMobile ? 18 : 22, color: 'white' }} />
                 </div>
-                <div>
-                  <p style={{ margin: 0, fontSize: 13, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Students</p>
-                  <h3 style={{ margin: '4px 0 0', fontSize: 32, fontWeight: 800, color: '#111827' }}>{data.counts?.students || 0}</h3>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ 
+                    margin: 0, 
+                    fontSize: isMobile ? 11 : 13, 
+                    color: '#6b7280', 
+                    fontWeight: 600, 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.05em' 
+                  }}>Total Students</p>
+                  <h3 style={{ 
+                    margin: '4px 0 0', 
+                    fontSize: isMobile ? 24 : 32, 
+                    fontWeight: 800, 
+                    color: '#111827',
+                    lineHeight: 1.2
+                  }}>{data.counts?.students || 0}</h3>
                 </div>
               </div>
             </div>
 
             <div style={{
               background: 'white',
-              borderRadius: 16,
-              padding: 24,
+              borderRadius: isMobile ? 12 : 16,
+              padding: isMobile ? '20px 16px' : isTablet ? '20px' : '24px',
               boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
               border: '1px solid #e5e7eb',
               transition: 'all 0.3s ease',
               cursor: 'default'
             }}
               onMouseEnter={e => {
-                e.currentTarget.style.boxShadow = '0 10px 40px rgba(16,185,129,0.15)'
-                e.currentTarget.style.transform = 'translateY(-4px)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 10px 40px rgba(16,185,129,0.15)'
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                }
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
-                e.currentTarget.style.transform = 'translateY(0)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: isMobile ? 'flex-start' : 'center', 
+                gap: isMobile ? 12 : 16, 
+                marginBottom: isMobile ? 8 : 12,
+                flexDirection: isMobile ? 'column' : 'row',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 12,
+                  width: isMobile ? 44 : 48,
+                  height: isMobile ? 44 : 48,
+                  borderRadius: isMobile ? 10 : 12,
                   background: 'linear-gradient(135deg, #10b981, #059669)',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  alignSelf: isMobile ? 'center' : 'flex-start'
                 }}>
-                  <FaChalkboardTeacher style={{ fontSize: 22, color: 'white' }} />
+                  <FaChalkboardTeacher style={{ fontSize: isMobile ? 18 : 22, color: 'white' }} />
                 </div>
-                <div>
-                  <p style={{ margin: 0, fontSize: 13, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Teachers</p>
-                  <h3 style={{ margin: '4px 0 0', fontSize: 32, fontWeight: 800, color: '#111827' }}>{data.counts?.teachers || 0}</h3>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ 
+                    margin: 0, 
+                    fontSize: isMobile ? 11 : 13, 
+                    color: '#6b7280', 
+                    fontWeight: 600, 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.05em' 
+                  }}>Teachers</p>
+                  <h3 style={{ 
+                    margin: '4px 0 0', 
+                    fontSize: isMobile ? 24 : 32, 
+                    fontWeight: 800, 
+                    color: '#111827',
+                    lineHeight: 1.2
+                  }}>{data.counts?.teachers || 0}</h3>
                 </div>
               </div>
             </div>
 
             <div style={{
               background: 'white',
-              borderRadius: 16,
-              padding: 24,
+              borderRadius: isMobile ? 12 : 16,
+              padding: isMobile ? '20px 16px' : isTablet ? '20px' : '24px',
               boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
               border: '1px solid #e5e7eb',
               transition: 'all 0.3s ease',
               cursor: 'default'
             }}
               onMouseEnter={e => {
-                e.currentTarget.style.boxShadow = '0 10px 40px rgba(139,92,246,0.15)'
-                e.currentTarget.style.transform = 'translateY(-4px)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 10px 40px rgba(139,92,246,0.15)'
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                }
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
-                e.currentTarget.style.transform = 'translateY(0)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: isMobile ? 'flex-start' : 'center', 
+                gap: isMobile ? 12 : 16, 
+                marginBottom: isMobile ? 8 : 12,
+                flexDirection: isMobile ? 'column' : 'row',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 12,
+                  width: isMobile ? 44 : 48,
+                  height: isMobile ? 44 : 48,
+                  borderRadius: isMobile ? 10 : 12,
                   background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  alignSelf: isMobile ? 'center' : 'flex-start'
                 }}>
-                  <FaLayerGroup style={{ fontSize: 22, color: 'white' }} />
+                  <FaLayerGroup style={{ fontSize: isMobile ? 18 : 22, color: 'white' }} />
                 </div>
-                <div>
-                  <p style={{ margin: 0, fontSize: 13, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Classes</p>
-                  <h3 style={{ margin: '4px 0 0', fontSize: 32, fontWeight: 800, color: '#111827' }}>{data.counts?.classes || 0}</h3>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ 
+                    margin: 0, 
+                    fontSize: isMobile ? 11 : 13, 
+                    color: '#6b7280', 
+                    fontWeight: 600, 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.05em' 
+                  }}>Classes</p>
+                  <h3 style={{ 
+                    margin: '4px 0 0', 
+                    fontSize: isMobile ? 24 : 32, 
+                    fontWeight: 800, 
+                    color: '#111827',
+                    lineHeight: 1.2
+                  }}>{data.counts?.classes || 0}</h3>
                 </div>
               </div>
             </div>
 
             <div style={{
               background: 'white',
-              borderRadius: 16,
-              padding: 24,
+              borderRadius: isMobile ? 12 : 16,
+              padding: isMobile ? '20px 16px' : isTablet ? '20px' : '24px',
               boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
               border: '1px solid #e5e7eb',
               transition: 'all 0.3s ease',
               cursor: 'default'
             }}
               onMouseEnter={e => {
-                e.currentTarget.style.boxShadow = '0 10px 40px rgba(236,72,153,0.15)'
-                e.currentTarget.style.transform = 'translateY(-4px)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 10px 40px rgba(236,72,153,0.15)'
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                }
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
-                e.currentTarget.style.transform = 'translateY(0)'
+                if (!isMobile) {
+                  e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: isMobile ? 'flex-start' : 'center', 
+                gap: isMobile ? 12 : 16, 
+                marginBottom: isMobile ? 8 : 12,
+                flexDirection: isMobile ? 'column' : 'row',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 12,
+                  width: isMobile ? 44 : 48,
+                  height: isMobile ? 44 : 48,
+                  borderRadius: isMobile ? 10 : 12,
                   background: 'linear-gradient(135deg, #ec4899, #db2777)',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  alignSelf: isMobile ? 'center' : 'flex-start'
                 }}>
-                  <FaBookOpen style={{ fontSize: 22, color: 'white' }} />
+                  <FaBookOpen style={{ fontSize: isMobile ? 18 : 22, color: 'white' }} />
                 </div>
-                <div>
-                  <p style={{ margin: 0, fontSize: 13, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Subjects</p>
-                  <h3 style={{ margin: '4px 0 0', fontSize: 32, fontWeight: 800, color: '#111827' }}>{data.counts?.subjects || 0}</h3>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ 
+                    margin: 0, 
+                    fontSize: isMobile ? 11 : 13, 
+                    color: '#6b7280', 
+                    fontWeight: 600, 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.05em' 
+                  }}>Subjects</p>
+                  <h3 style={{ 
+                    margin: '4px 0 0', 
+                    fontSize: isMobile ? 24 : 32, 
+                    fontWeight: 800, 
+                    color: '#111827',
+                    lineHeight: 1.2
+                  }}>{data.counts?.subjects || 0}</h3>
                 </div>
               </div>
             </div>
@@ -898,9 +1018,9 @@ export default function Dashboard() {
           {/* School Information & Analytics */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth <= 968 ? '1fr' : '2fr 1fr',
-            gap: 24,
-            marginBottom: 32
+            gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr',
+            gap: isMobile ? 16 : 24,
+            marginBottom: isMobile ? 20 : 32
           }}>
             {/* School Info Card */}
             <div style={{
