@@ -669,7 +669,7 @@ export default function EnterScores() {
         }
         
         const urlWithToken = `${baseURL}${res.data.preview_url}${res.data.preview_url.includes('?') ? '&' : '?'}token=${token}`
-        console.log('Opening preview URL:', urlWithToken)
+        console.log('Opening preview URL for report card')
         window.open(urlWithToken, '_blank')
       }
       

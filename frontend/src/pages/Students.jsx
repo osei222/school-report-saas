@@ -781,8 +781,7 @@ export default function Students() {
                 }
               }
               
-              console.log('Form validation errors:', errors)
-              console.log('Current form data:', addForm)
+              console.log('Form validation failed with', Object.keys(errors).length, 'errors')
               
               setFormErrors(errors)
               if (Object.keys(errors).length > 0) return
@@ -815,10 +814,7 @@ export default function Students() {
                 })
                 
                 // Log all form data entries
-                console.log('Final FormData entries:')
-                for (let [key, value] of fd.entries()) {
-                  console.log(`${key}:`, value)
-                }
+                console.log('FormData prepared for submission')
                 
                 const response = await api.post('/students/', fd)
                 console.log('Student created successfully:', response.data)

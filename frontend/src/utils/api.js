@@ -28,6 +28,9 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('sr_token') || localStorage.getItem('accessToken')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
+  } else if (config.url && !config.url.includes('/auth/')) {
+    // Only log for non-auth requests
+    console.warn('No authentication token found for API request')
   }
   // Normalize trailing slashes for non-GET methods to play nice with DRF DefaultRouter
   try {
@@ -43,6 +46,23 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (error) => {
+    // Handle 401 authentication errors specifically
+    if (error.response?.status === 401) {
+      console.warn('Authentication failed - redirecting to login')
+      const currentToken = localStorage.getItem('sr_token')
+      if (currentToken) {
+        console.warn('Token exists but was rejected by server')
+        // Clear invalid token
+        localStorage.removeItem('sr_token')
+        localStorage.removeItem('sr_refresh')
+        localStorage.removeItem('sr_user')
+      }
+      // Don't auto-redirect on mobile to prevent loops
+      if (window.innerWidth > 768 && !window.location.pathname.includes('/login')) {
+        window.location.href = '/login'
+      }
+    }
+    
     // Normalize error into error.normalizedMessage
     let message = 'Request failed'
     if (error.response) {
