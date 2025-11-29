@@ -1025,64 +1025,111 @@ export default function Dashboard() {
             {/* School Info Card */}
             <div style={{
               background: 'white',
-              borderRadius: 20,
-              padding: window.innerWidth <= 640 ? 20 : 32,
+              borderRadius: isMobile ? 16 : 20,
+              padding: isMobile ? '20px 16px' : isTablet ? '24px' : '32px',
               boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
               border: '1px solid #e5e7eb'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                marginBottom: isMobile ? 16 : 24,
+                flexDirection: isMobile ? 'column' : 'row',
+                gap: isMobile ? 12 : 0,
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 <h2 style={{ 
                   margin: 0, 
-                  fontSize: 22, 
+                  fontSize: isMobile ? 18 : 22, 
                   fontWeight: 800, 
                   color: '#111827',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 12
+                  gap: isMobile ? 8 : 12,
+                  flexDirection: isMobile ? 'column' : 'row'
                 }}>
                   <span style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 10,
+                    width: isMobile ? 36 : 40,
+                    height: isMobile ? 36 : 40,
+                    borderRadius: isMobile ? 8 : 10,
                     background: 'linear-gradient(135deg, #1e40af, #3b82f6)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: 18
+                    fontSize: isMobile ? 16 : 18
                   }}>
                     🏫
                   </span>
                   School Information
                 </h2>
               </div>
-              <div style={{ display: 'grid', gap: 16 }}>
+              <div style={{ display: 'grid', gap: isMobile ? 12 : 16 }}>
                 <div style={{ 
                   background: '#f8fafc', 
-                  padding: 16, 
-                  borderRadius: 12,
+                  padding: isMobile ? '14px 12px' : '16px', 
+                  borderRadius: isMobile ? 10 : 12,
                   border: '1px solid #e2e8f0'
                 }}>
-                  <div style={{ fontSize: 13, color: '#64748b', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>School Name</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>{data.school?.name}</div>
+                  <div style={{ 
+                    fontSize: isMobile ? 11 : 13, 
+                    color: '#64748b', 
+                    fontWeight: 600, 
+                    marginBottom: 4, 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.05em' 
+                  }}>School Name</div>
+                  <div style={{ 
+                    fontSize: isMobile ? 16 : 18, 
+                    fontWeight: 800, 
+                    color: '#0f172a',
+                    wordBreak: 'break-word'
+                  }}>{data.school?.name}</div>
                 </div>
-                <div style={{ display: 'grid', gap: 12, gridTemplateColumns: '1fr 1fr' }}>
+                <div style={{ 
+                  display: 'grid', 
+                  gap: isMobile ? 8 : 12, 
+                  gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr'
+                }}>
                   <div style={{ 
                     background: '#f0f9ff', 
-                    padding: 16, 
-                    borderRadius: 12,
+                    padding: isMobile ? '14px 12px' : '16px', 
+                    borderRadius: isMobile ? 10 : 12,
                     border: '1px solid #bae6fd'
                   }}>
-                    <div style={{ fontSize: 12, color: '#0284c7', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Academic Year</div>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: '#0c4a6e' }}>{data.current?.academic_year || 'Not Set'}</div>
+                    <div style={{ 
+                      fontSize: isMobile ? 10 : 12, 
+                      color: '#0284c7', 
+                      fontWeight: 600, 
+                      marginBottom: 4, 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.05em' 
+                    }}>Academic Year</div>
+                    <div style={{ 
+                      fontSize: isMobile ? 14 : 16, 
+                      fontWeight: 800, 
+                      color: '#0c4a6e' 
+                    }}>{data.current?.academic_year || 'Not Set'}</div>
                   </div>
                   <div style={{ 
                     background: '#f0fdf4', 
-                    padding: 16, 
-                    borderRadius: 12,
+                    padding: isMobile ? '14px 12px' : '16px', 
+                    borderRadius: isMobile ? 10 : 12,
                     border: '1px solid #bbf7d0'
                   }}>
-                    <div style={{ fontSize: 12, color: '#059669', fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Current Term</div>
-                    <div style={{ fontSize: 16, fontWeight: 800, color: '#064e3b' }}>{data.current?.term || 'Not Set'}</div>
+                    <div style={{ 
+                      fontSize: isMobile ? 10 : 12, 
+                      color: '#059669', 
+                      fontWeight: 600, 
+                      marginBottom: 4, 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.05em' 
+                    }}>Current Term</div>
+                    <div style={{ 
+                      fontSize: isMobile ? 14 : 16, 
+                      fontWeight: 800, 
+                      color: '#064e3b' 
+                    }}>{data.current?.term || 'Not Set'}</div>
                   </div>
                 </div>
               </div>
@@ -1091,34 +1138,63 @@ export default function Dashboard() {
             {/* Quick Analytics */}
             <div style={{
               background: 'white',
-              borderRadius: 20,
-              padding: window.innerWidth <= 640 ? 20 : 32,
+              borderRadius: isMobile ? 16 : 20,
+              padding: isMobile ? '20px 16px' : isTablet ? '24px' : '32px',
               boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
               border: '1px solid #e5e7eb'
             }}>
               <h3 style={{ 
-                margin: '0 0 20px 0', 
-                fontSize: 18, 
+                margin: isMobile ? '0 0 16px 0' : '0 0 20px 0', 
+                fontSize: isMobile ? 16 : 18, 
                 fontWeight: 800, 
                 color: '#111827',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8
+                gap: isMobile ? 6 : 8,
+                justifyContent: isMobile ? 'center' : 'flex-start'
               }}>
                 📊 Quick Stats
               </h3>
-              <div style={{ display: 'grid', gap: 16 }}>
-                <div style={{ textAlign: 'center', padding: 16, background: '#fef3c7', borderRadius: 12 }}>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: '#92400e' }}>
+              <div style={{ display: 'grid', gap: isMobile ? 12 : 16 }}>
+                <div style={{ 
+                  textAlign: 'center', 
+                  padding: isMobile ? '14px 12px' : '16px', 
+                  background: '#fef3c7', 
+                  borderRadius: isMobile ? 10 : 12,
+                  border: '1px solid rgba(251, 191, 36, 0.3)'
+                }}>
+                  <div style={{ 
+                    fontSize: isMobile ? 20 : 24, 
+                    fontWeight: 800, 
+                    color: '#92400e' 
+                  }}>
                     {Math.round(((data.counts?.students || 0) / (data.counts?.teachers || 1)) * 10) / 10}
                   </div>
-                  <div style={{ fontSize: 12, color: '#92400e', fontWeight: 600 }}>Student-Teacher Ratio</div>
+                  <div style={{ 
+                    fontSize: isMobile ? 10 : 12, 
+                    color: '#92400e', 
+                    fontWeight: 600 
+                  }}>Student-Teacher Ratio</div>
                 </div>
-                <div style={{ textAlign: 'center', padding: 16, background: '#e0f2fe', borderRadius: 12 }}>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: '#0e7490' }}>
+                <div style={{ 
+                  textAlign: 'center', 
+                  padding: isMobile ? '14px 12px' : '16px', 
+                  background: '#e0f2fe', 
+                  borderRadius: isMobile ? 10 : 12,
+                  border: '1px solid rgba(6, 182, 212, 0.3)'
+                }}>
+                  <div style={{ 
+                    fontSize: isMobile ? 20 : 24, 
+                    fontWeight: 800, 
+                    color: '#0e7490' 
+                  }}>
                     {Math.round(((data.counts?.students || 0) / (data.counts?.classes || 1)) * 10) / 10}
                   </div>
-                  <div style={{ fontSize: 12, color: '#0e7490', fontWeight: 600 }}>Students per Class</div>
+                  <div style={{ 
+                    fontSize: isMobile ? 10 : 12, 
+                    color: '#0e7490', 
+                    fontWeight: 600 
+                  }}>Students per Class</div>
                 </div>
               </div>
             </div>
@@ -1127,64 +1203,77 @@ export default function Dashboard() {
           {/* Management Actions */}
           <div style={{
             background: 'white',
-            borderRadius: 20,
-            padding: window.innerWidth <= 640 ? 20 : 32,
+            borderRadius: isMobile ? 16 : 20,
+            padding: isMobile ? '20px 16px' : isTablet ? '24px' : '32px',
             boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
             border: '1px solid #e5e7eb'
           }}>
             <h2 style={{ 
-              margin: '0 0 24px 0', 
-              fontSize: 22, 
+              margin: isMobile ? '0 0 16px 0' : '0 0 24px 0', 
+              fontSize: isMobile ? 18 : 22, 
               fontWeight: 800, 
               color: '#111827',
               display: 'flex',
               alignItems: 'center',
-              gap: 12
+              gap: isMobile ? 8 : 12,
+              justifyContent: isMobile ? 'center' : 'flex-start',
+              flexDirection: isMobile ? 'column' : 'row',
+              textAlign: isMobile ? 'center' : 'left'
             }}>
               <span style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
+                width: isMobile ? 36 : 40,
+                height: isMobile ? 36 : 40,
+                borderRadius: isMobile ? 8 : 10,
                 background: 'linear-gradient(135deg, #10b981, #059669)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 18
+                fontSize: isMobile ? 16 : 18
               }}>
                 ⚡
               </span>
               Management Center
             </h2>
-            <div style={{ display: 'grid', gap: 16, gridTemplateColumns: window.innerWidth <= 640 ? '1fr' : window.innerWidth <= 968 ? '1fr 1fr' : 'repeat(4, 1fr)' }}>
+            <div style={{ 
+              display: 'grid', 
+              gap: isMobile ? 12 : 16, 
+              gridTemplateColumns: isMobile ? '1fr 1fr' : isTablet ? '1fr 1fr' : 'repeat(4, 1fr)'
+            }}>
               <button
                 onClick={() => navigate('/students')}
                 style={{
                   background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
                   color: 'white',
                   border: 'none',
-                  borderRadius: 14,
-                  padding: '20px 20px',
+                  borderRadius: isMobile ? 12 : 14,
+                  padding: isMobile ? '16px 12px' : '20px 20px',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 12,
-                  fontSize: 14,
+                  gap: isMobile ? 8 : 12,
+                  fontSize: isMobile ? 12 : 14,
                   fontWeight: 700,
                   boxShadow: '0 4px 14px rgba(59, 130, 246, 0.4)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  minHeight: isMobile ? '80px' : 'auto',
+                  aspectRatio: isMobile ? '1' : 'auto'
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.5)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(59, 130, 246, 0.5)'
+                  }
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(59, 130, 246, 0.4)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(59, 130, 246, 0.4)'
+                  }
                 }}
               >
-                <FaUserGraduate style={{ fontSize: 24 }} />
-                <span>Students</span>
+                <FaUserGraduate style={{ fontSize: isMobile ? 20 : 24 }} />
+                <span style={{ fontSize: isMobile ? 11 : 14 }}>Students</span>
               </button>
 
               <button
@@ -1193,29 +1282,35 @@ export default function Dashboard() {
                   background: 'linear-gradient(135deg, #10b981, #059669)',
                   color: 'white',
                   border: 'none',
-                  borderRadius: 14,
-                  padding: '20px 20px',
+                  borderRadius: isMobile ? 12 : 14,
+                  padding: isMobile ? '16px 12px' : '20px 20px',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 12,
-                  fontSize: 14,
+                  gap: isMobile ? 8 : 12,
+                  fontSize: isMobile ? 12 : 14,
                   fontWeight: 700,
                   boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  minHeight: isMobile ? '80px' : 'auto',
+                  aspectRatio: isMobile ? '1' : 'auto'
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.5)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.5)'
+                  }
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.4)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.4)'
+                  }
                 }}
               >
-                <FaChalkboardTeacher style={{ fontSize: 24 }} />
-                <span>Teachers</span>
+                <FaChalkboardTeacher style={{ fontSize: isMobile ? 20 : 24 }} />
+                <span style={{ fontSize: isMobile ? 11 : 14 }}>Teachers</span>
               </button>
 
               <button
@@ -1224,29 +1319,35 @@ export default function Dashboard() {
                   background: 'linear-gradient(135deg, #8b5cf6, #7c3aed)',
                   color: 'white',
                   border: 'none',
-                  borderRadius: 14,
-                  padding: '20px 20px',
+                  borderRadius: isMobile ? 12 : 14,
+                  padding: isMobile ? '16px 12px' : '20px 20px',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 12,
-                  fontSize: 14,
+                  gap: isMobile ? 8 : 12,
+                  fontSize: isMobile ? 12 : 14,
                   fontWeight: 700,
                   boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  minHeight: isMobile ? '80px' : 'auto',
+                  aspectRatio: isMobile ? '1' : 'auto'
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.5)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(139, 92, 246, 0.5)'
+                  }
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(139, 92, 246, 0.4)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(139, 92, 246, 0.4)'
+                  }
                 }}
               >
-                <FaLayerGroup style={{ fontSize: 24 }} />
-                <span>Classes</span>
+                <FaLayerGroup style={{ fontSize: isMobile ? 20 : 24 }} />
+                <span style={{ fontSize: isMobile ? 11 : 14 }}>Classes</span>
               </button>
 
               <button
@@ -1255,29 +1356,35 @@ export default function Dashboard() {
                   background: 'linear-gradient(135deg, #ec4899, #db2777)',
                   color: 'white',
                   border: 'none',
-                  borderRadius: 14,
-                  padding: '20px 20px',
+                  borderRadius: isMobile ? 12 : 14,
+                  padding: isMobile ? '16px 12px' : '20px 20px',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 12,
-                  fontSize: 14,
+                  gap: isMobile ? 8 : 12,
+                  fontSize: isMobile ? 12 : 14,
                   fontWeight: 700,
                   boxShadow: '0 4px 14px rgba(236, 72, 153, 0.4)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  minHeight: isMobile ? '80px' : 'auto',
+                  aspectRatio: isMobile ? '1' : 'auto'
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(236, 72, 153, 0.5)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(236, 72, 153, 0.5)'
+                  }
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(236, 72, 153, 0.4)'
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(236, 72, 153, 0.4)'
+                  }
                 }}
               >
-                <FaFileAlt style={{ fontSize: 24 }} />
-                <span>Reports</span>
+                <FaFileAlt style={{ fontSize: isMobile ? 20 : 24 }} />
+                <span style={{ fontSize: isMobile ? 11 : 14 }}>Reports</span>
               </button>
             </div>
           </div>
