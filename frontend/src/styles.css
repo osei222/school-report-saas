@@ -472,9 +472,33 @@ input.error:focus, select.error:focus, textarea.error:focus {
   }
 }
 
-.btn { background: #1f2937; color: var(--text); border: 1px solid #374151; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-.btn:hover { filter: brightness(1.1); }
-.btn.primary { background: var(--primary); border-color: #1d4ed8; }
+.btn { 
+	background: #1f2937; 
+	color: var(--text); 
+	border: 1px solid #374151; 
+	padding: 12px 16px; 
+	border-radius: 8px; 
+	cursor: pointer; 
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	justify-content: center;
+	min-height: 44px;
+	transition: all 0.2s ease;
+}
+.btn:hover { 
+	filter: brightness(1.1); 
+	transform: translateY(-1px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.btn.primary { 
+	background: linear-gradient(135deg, var(--primary), #1d4ed8); 
+	border-color: #1d4ed8; 
+	color: white;
+}
 
 .tile { background: var(--card); padding: 16px; border-radius: 12px; border: 1px solid #1f2937; position: relative; overflow: hidden; }
 .tile .k { color: var(--muted); font-size: 14px; }
@@ -554,9 +578,49 @@ input.error:focus, select.error:focus, textarea.error:focus {
 	.hero-inner { grid-template-columns: 1fr; }
 }
 
-/* Responsive adjustments */
+/* Enhanced responsive adjustments */
+@media (max-width: 480px) {
+	/* Small mobile optimizations */
+	.hero {
+		padding: 32px 0 !important;
+	}
+	.hero h1 {
+		font-size: 24px !important;
+		line-height: 1.2 !important;
+		text-align: center !important;
+	}
+	.hero p {
+		text-align: center !important;
+		font-size: 14px !important;
+	}
+	.btn {
+		width: 100%;
+		padding: 12px 16px;
+		font-size: 14px;
+	}
+	.grid {
+		grid-template-columns: 1fr !important;
+		gap: 12px !important;
+	}
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+	/* Tablet optimizations */
+	.hero {
+		padding: 40px 0 !important;
+	}
+	.hero h1 {
+		font-size: 28px !important;
+	}
+	.btn {
+		padding: 14px 20px;
+		font-size: 15px;
+	}
+}
+
 @media (max-width: 900px) {
-	.grid { grid-template-columns: 1fr; }
+	.hero-inner { grid-template-columns: 1fr; }
+	.grid { grid-template-columns: 1fr 1fr; }
 	.split { grid-template-columns: 1fr; }
 	.navbar .user span { display: none; }
 }
