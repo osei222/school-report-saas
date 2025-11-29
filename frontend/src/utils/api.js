@@ -31,6 +31,22 @@ console.log('API Base URL:', base) // Debug log
 
 const api = axios.create({ baseURL: base })
 
+// CORS-enabled API call with fallback
+export const corsEnabledRequest = async (endpoint, options = {}) => {
+  try {
+    // Try normal endpoint first
+    return await api(endpoint, options)
+  } catch (error) {
+    if (error.message?.includes('CORS') && endpoint.includes('/teachers/')) {
+      console.log('CORS blocked, trying CORS-enabled endpoint...')
+      // Fallback to CORS-enabled endpoint for teachers
+      const corsEndpoint = endpoint.replace('/teachers/', '/teachers/cors/')
+      return await api(corsEndpoint, options)
+    }
+    throw error
+  }
+}
+
 // Attach token per request (resilient even if context header lost)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('sr_token') || localStorage.getItem('accessToken')
