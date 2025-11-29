@@ -1,25 +1,33 @@
 import axios from 'axios'
 
-// Dynamic base resolution for development and production
-const explicit = import.meta.env.VITE_API_BASE
-const isDev = import.meta.env.DEV
-const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost'
-
-let base
-if (explicit) {
-  // Use explicit API URL from environment
-  base = explicit.endsWith('/') ? explicit.slice(0, -1) : explicit
-} else if (isDev) {
-  // Development mode
-  if (host && host !== 'localhost' && !host.startsWith('127.')) {
-    base = `http://${host}:8000/api`
-  } else {
-    base = 'http://localhost:8000/api'
+// Production-first API base URL configuration
+const getApiBaseUrl = () => {
+  // Check for explicit environment variable first
+  if (import.meta.env.VITE_API_BASE) {
+    return import.meta.env.VITE_API_BASE.replace(/\/$/, '')
   }
-} else {
-  // Production mode - will be set via environment variable
-  base = import.meta.env.VITE_API_BASE || 'https://school-report-saas.onrender.com/api'
+  
+  // Check if we're in production (Netlify)
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost'
+  const isProduction = hostname.includes('netlify.app') || import.meta.env.PROD
+  
+  if (isProduction) {
+    // Force production API URL
+    return 'https://school-report-saas.onrender.com/api'
+  }
+  
+  // Development fallback
+  if (hostname !== 'localhost' && !hostname.startsWith('127.')) {
+    // Mobile development
+    return `http://${hostname}:8000/api`
+  }
+  
+  // Local development
+  return 'http://localhost:8000/api'
 }
+
+const base = getApiBaseUrl()
+console.log('API Base URL:', base) // Debug log
 
 const api = axios.create({ baseURL: base })
 
@@ -93,9 +101,11 @@ api.interceptors.response.use(
       }
     }
     
-    // Normalize error into error.normalizedMessage
+    // Enhanced error handling with CORS detection
     let message = 'Request failed'
+    
     if (error.response) {
+      // Server responded with error status
       const data = error.response.data
       message = data?.detail || data?.message || message
       if (message === 'Request failed' && data && typeof data === 'object') {
@@ -107,12 +117,32 @@ api.interceptors.response.use(
         }
         if (parts.length) message = parts.join(' | ')
       }
-      message = `${message}`
+      console.error('API Error Response:', {
+        status: error.response.status,
+        data: error.response.data,
+        headers: error.response.headers
+      })
     } else if (error.request) {
-      message = 'No response from server (network)' 
+      // Network error or CORS issue
+      console.error('Network/CORS Error:', {
+        message: error.message,
+        request: error.request,
+        config: error.config
+      })
+      
+      if (error.message?.includes('CORS') || error.message?.includes('blocked by CORS policy')) {
+        message = 'CORS policy blocked this request. Please check backend CORS configuration.'
+      } else if (error.message?.includes('Network Error')) {
+        message = 'Network error - unable to reach the server. Check your internet connection or server status.'
+      } else {
+        message = 'No response from server (network error)'
+      }
     } else {
+      // Request setup error
+      console.error('Request Setup Error:', error.message)
       message = error.message
     }
+    
     error.normalizedMessage = message
     return Promise.reject(error)
   }

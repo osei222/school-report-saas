@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
       if (savedToken) {
         try {
           // Try a simple API call to verify token
-          await api.get('/auth/user/')
+          await api.get('/auth/profile/')
         } catch (error) {
           if (error.response?.status === 401) {
             console.log('Token expired, attempting refresh...')
