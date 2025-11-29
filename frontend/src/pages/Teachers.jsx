@@ -16,7 +16,7 @@ export default function Teachers() {
     password_confirm: '', 
     employee_id: '',
     phone_number: '',
-    hire_date: '',
+    hire_date: new Date().toISOString().split('T')[0],
     qualification: '',
     experience_years: 0,
     emergency_contact: '',
@@ -130,6 +130,7 @@ export default function Teachers() {
   }
 
   const resetForm = () => {
+    const today = new Date().toISOString().split('T')[0]
     setForm({
       email: '', 
       first_name: '', 
@@ -138,7 +139,7 @@ export default function Teachers() {
       password_confirm: '', 
       employee_id: '',
       phone_number: '',
-      hire_date: '',
+      hire_date: today,
       qualification: '',
       experience_years: 0,
       emergency_contact: '',
@@ -882,6 +883,97 @@ export default function Teachers() {
                       onChange={handleChange} 
                       required
                       placeholder="Confirm password"
+                      style={{
+                        width: '100%',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
+                        fontSize: isMobile ? 16 : 15,
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
+                        color: 'white',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Hire Date */}
+                <div className="field">
+                  <label style={{
+                    display: 'block',
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
+                  }}>
+                    Hire Date <span style={{ color: '#ef4444' }}>*</span>
+                  </label>
+                  <div className="input-with-icon" style={{ position: 'relative' }}>
+                    <FaCalendarAlt style={{
+                      position: 'absolute',
+                      left: isMobile ? 16 : 14,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#64748b',
+                      fontSize: isMobile ? 16 : 14,
+                      zIndex: 2
+                    }} />
+                    <input 
+                      type="date" 
+                      name="hire_date" 
+                      value={form.hire_date} 
+                      onChange={handleChange} 
+                      required
+                      style={{
+                        width: '100%',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
+                        fontSize: isMobile ? 16 : 15,
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
+                        color: 'white',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box',
+                        colorScheme: 'dark'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Phone Number */}
+                <div className="field">
+                  <label style={{
+                    display: 'block',
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
+                    fontWeight: 600,
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
+                  }}>
+                    Phone Number
+                  </label>
+                  <div className="input-with-icon" style={{ position: 'relative' }}>
+                    <FaPhone style={{
+                      position: 'absolute',
+                      left: isMobile ? 16 : 14,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#64748b',
+                      fontSize: isMobile ? 16 : 14,
+                      zIndex: 2
+                    }} />
+                    <input 
+                      type="tel" 
+                      name="phone_number" 
+                      value={form.phone_number} 
+                      onChange={handleChange} 
+                      placeholder="Enter phone number"
                       style={{
                         width: '100%',
                         padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
