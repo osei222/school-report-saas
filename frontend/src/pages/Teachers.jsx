@@ -58,6 +58,28 @@ export default function Teachers() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // Prevent body scroll when modal is open on mobile
+  useEffect(() => {
+    if (showCreate && windowWidth <= 768) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.height = '100%'
+    } else {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+      document.body.style.height = ''
+    }
+    
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+      document.body.style.height = ''
+    }
+  }, [showCreate, windowWidth])
+
   // Responsive design constants
   const isMobile = windowWidth <= 768
   const isTablet = windowWidth <= 1024
@@ -486,30 +508,46 @@ export default function Teachers() {
 
       {showCreate && (
         <div className="modal" onClick={()=>setShowCreate(false)} style={{
-          padding: isMobile ? '10px' : '16px',
-          background: 'rgba(0, 0, 0, 0.7)',
-          backdropFilter: 'blur(8px)'
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          justifyContent: 'center',
+          padding: isMobile ? '0' : '16px',
+          background: 'rgba(0, 0, 0, 0.8)',
+          backdropFilter: 'blur(12px)',
+          overflow: 'hidden'
         }}>
           <div className="modal-content" onClick={(e)=>e.stopPropagation()} style={{
-            width: isMobile ? '100%' : '90%',
-            maxWidth: isMobile ? 'none' : '600px',
-            maxHeight: isMobile ? '90vh' : '85vh',
-            background: 'rgba(15, 23, 42, 0.95)',
-            border: '1px solid rgba(34, 197, 94, 0.3)',
-            borderRadius: isMobile ? 12 : 16,
-            backdropFilter: 'blur(16px)',
+            width: isMobile ? '100vw' : '90%',
+            height: isMobile ? '100vh' : 'auto',
+            maxWidth: isMobile ? 'none' : '700px',
+            maxHeight: isMobile ? 'none' : '90vh',
+            background: isMobile ? 'rgba(15, 23, 42, 1)' : 'rgba(15, 23, 42, 0.95)',
+            border: isMobile ? 'none' : '1px solid rgba(34, 197, 94, 0.3)',
+            borderRadius: isMobile ? 0 : 16,
+            backdropFilter: 'blur(20px)',
             color: 'white',
             overflow: 'hidden',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            position: 'relative'
           }}>
             <div className="modal-header" style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: isMobile ? '16px 16px 12px' : '20px 24px 16px',
+              padding: isMobile ? '20px 20px 16px' : '20px 24px 16px',
               borderBottom: '1px solid rgba(71, 85, 105, 0.3)',
-              background: 'linear-gradient(135deg, rgba(22, 163, 74, 0.1), rgba(34, 197, 94, 0.05))'
+              background: isMobile ? 'linear-gradient(135deg, rgba(22, 163, 74, 0.15), rgba(34, 197, 94, 0.1))' : 'linear-gradient(135deg, rgba(22, 163, 74, 0.1), rgba(34, 197, 94, 0.05))',
+              backdropFilter: 'blur(8px)',
+              position: isMobile ? 'sticky' : 'static',
+              top: 0,
+              zIndex: 10
             }}>
               <div style={{
                 display: 'flex',
@@ -540,49 +578,87 @@ export default function Teachers() {
                 className="btn" 
                 onClick={()=>setShowCreate(false)}
                 style={{
-                  background: 'rgba(239, 68, 68, 0.1)',
-                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  background: 'rgba(239, 68, 68, 0.15)',
+                  border: '2px solid rgba(239, 68, 68, 0.4)',
                   color: '#fca5a5',
-                  padding: isMobile ? '8px 10px' : '8px 12px',
-                  borderRadius: 8,
-                  fontSize: isMobile ? 16 : 18,
-                  fontWeight: 600,
-                  minHeight: isMobile ? 36 : 'auto',
-                  minWidth: isMobile ? 36 : 'auto'
+                  padding: isMobile ? '12px 14px' : '8px 12px',
+                  borderRadius: 10,
+                  fontSize: isMobile ? 18 : 16,
+                  fontWeight: 700,
+                  minHeight: isMobile ? 44 : 'auto',
+                  minWidth: isMobile ? 44 : 'auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer'
                 }}
               >
                 ×
               </button>
             </div>
+            
+            {/* Error and Success Messages */}
+            {(error || message) && (
+              <div style={{
+                padding: isMobile ? '16px 20px' : '12px 24px',
+                margin: 0,
+                background: error 
+                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1))' 
+                  : 'linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(22, 163, 74, 0.1))',
+                border: error 
+                  ? '2px solid rgba(239, 68, 68, 0.3)' 
+                  : '2px solid rgba(34, 197, 94, 0.3)',
+                borderRadius: isMobile ? 10 : 8,
+                marginBottom: isMobile ? 16 : 12,
+                marginLeft: isMobile ? 20 : 24,
+                marginRight: isMobile ? 20 : 24,
+                fontSize: isMobile ? 15 : 14,
+                fontWeight: 500,
+                color: error ? '#fca5a5' : '#86efac'
+              }}>
+                {error || message}
+              </div>
+            )}
+            
             <form onSubmit={handleCreate} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <div style={{
                 flex: 1,
                 overflowY: 'auto',
-                padding: isMobile ? '16px' : '20px 24px',
+                overflowX: 'hidden',
+                padding: isMobile ? '24px 20px' : '20px 24px',
                 display: 'grid',
                 gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                gap: isMobile ? 16 : 20,
-                alignContent: 'start'
+                gap: isMobile ? 20 : 20,
+                alignContent: 'start',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(34, 197, 94, 0.3) transparent',
+                // Add momentum scrolling for iOS
+                '-webkit-overflow-scrolling': 'touch',
+                // Ensure proper scroll behavior
+                scrollBehavior: 'smooth'
               }}>
                 {/* Email Field */}
                 <div className="field" style={{ gridColumn: isMobile ? '1' : '1 / -1' }}>
                   <label style={{
                     display: 'block',
-                    marginBottom: 8,
-                    fontSize: 14,
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
                     fontWeight: 600,
-                    color: '#d1d5db'
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
                   }}>
                     Email Address <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <div className="input-with-icon" style={{ position: 'relative' }}>
                     <FaEnvelope style={{
                       position: 'absolute',
-                      left: 14,
+                      left: isMobile ? 16 : 14,
                       top: '50%',
                       transform: 'translateY(-50%)',
                       color: '#64748b',
-                      fontSize: 14,
+                      fontSize: isMobile ? 16 : 14,
                       zIndex: 2
                     }} />
                     <input 
@@ -594,14 +670,16 @@ export default function Teachers() {
                       placeholder="Enter email address"
                       style={{
                         width: '100%',
-                        padding: isMobile ? '14px 14px 14px 44px' : '12px 12px 12px 42px',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
                         fontSize: isMobile ? 16 : 15,
-                        border: '1px solid rgba(71, 85, 105, 0.3)',
-                        borderRadius: 8,
-                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
                         color: 'white',
                         outline: 'none',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
                       }}
                     />
                   </div>
@@ -806,25 +884,31 @@ export default function Teachers() {
               <div className="modal-actions" style={{
                 display: 'flex',
                 flexDirection: isMobile ? 'column-reverse' : 'row',
-                gap: isMobile ? 12 : 8,
-                padding: isMobile ? '16px' : '16px 24px 20px',
-                borderTop: '1px solid rgba(71, 85, 105, 0.3)',
-                background: 'rgba(15, 23, 42, 0.3)',
-                justifyContent: 'flex-end'
+                gap: isMobile ? 16 : 8,
+                padding: isMobile ? '20px 20px 24px' : '16px 24px 20px',
+                borderTop: '2px solid rgba(71, 85, 105, 0.3)',
+                background: isMobile 
+                  ? 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.8))' 
+                  : 'rgba(15, 23, 42, 0.3)',
+                justifyContent: 'flex-end',
+                backdropFilter: 'blur(8px)',
+                position: isMobile ? 'sticky' : 'static',
+                bottom: 0,
+                zIndex: 10
               }}>
                 <button 
                   type="button" 
                   className="btn" 
                   onClick={()=>setShowCreate(false)}
                   style={{
-                    padding: isMobile ? '14px 18px' : '10px 16px',
-                    background: 'rgba(107, 114, 128, 0.1)',
-                    border: '1px solid rgba(107, 114, 128, 0.3)',
-                    borderRadius: 8,
-                    color: '#9ca3af',
-                    fontWeight: 500,
-                    fontSize: isMobile ? 14 : 15,
-                    minHeight: isMobile ? 48 : 40,
+                    padding: isMobile ? '16px 20px' : '10px 16px',
+                    background: 'rgba(107, 114, 128, 0.15)',
+                    border: '2px solid rgba(107, 114, 128, 0.4)',
+                    borderRadius: isMobile ? 12 : 8,
+                    color: '#cbd5e1',
+                    fontWeight: 600,
+                    fontSize: isMobile ? 15 : 15,
+                    minHeight: isMobile ? 54 : 40,
                     width: isMobile ? '100%' : 'auto',
                     transition: 'all 0.3s ease'
                   }}
@@ -836,19 +920,19 @@ export default function Teachers() {
                   className="btn primary" 
                   type="submit"
                   style={{
-                    padding: isMobile ? '14px 18px' : '10px 20px',
+                    padding: isMobile ? '16px 22px' : '10px 20px',
                     background: loading 
                       ? 'rgba(107, 114, 128, 0.5)' 
                       : 'linear-gradient(135deg, #22c55e, #16a34a)',
                     border: 'none',
-                    borderRadius: 8,
+                    borderRadius: isMobile ? 12 : 8,
                     color: 'white',
-                    fontWeight: 600,
-                    fontSize: isMobile ? 14 : 15,
-                    minHeight: isMobile ? 48 : 40,
+                    fontWeight: 700,
+                    fontSize: isMobile ? 15 : 15,
+                    minHeight: isMobile ? 54 : 40,
                     width: isMobile ? '100%' : 'auto',
                     transition: 'all 0.3s ease',
-                    boxShadow: loading ? 'none' : '0 4px 12px rgba(34, 197, 94, 0.3)',
+                    boxShadow: loading ? 'none' : '0 6px 16px rgba(34, 197, 94, 0.4)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
