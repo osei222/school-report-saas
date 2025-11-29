@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Connectivity Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .test { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #cce7ff; border-color: #99d5ff; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f8f9fa; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>School Report SaaS - Backend Connectivity Test</h1>
+    
+    <div id="results"></div>
+    
+    <button onclick="testAll()">🔍 Run All Tests</button>
+    <button onclick="clearResults()">🗑️ Clear Results</button>
+
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(title, content, status = 'info') {
+            const div = document.createElement('div');
+            div.className = `test ${status}`;
+            div.innerHTML = `<h3>${title}</h3><div>${content}</div>`;
+            results.appendChild(div);
+        }
+        
+        function clearResults() {
+            results.innerHTML = '';
+        }
+        
+        async function testBackendRoot() {
+            try {
+                const response = await fetch('https://school-report-saas.onrender.com/', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                const text = await response.text();
+                addResult(
+                    '✅ Backend Root Test', 
+                    `<strong>Status:</strong> ${response.status}<br>
+                     <strong>Response:</strong><pre>${text.substring(0, 500)}...</pre>`,
+                    'success'
+                );
+                return true;
+            } catch (error) {
+                addResult(
+                    '❌ Backend Root Test Failed', 
+                    `<strong>Error:</strong> ${error.message}<br>
+                     <strong>Type:</strong> ${error.constructor.name}`,
+                    'error'
+                );
+                return false;
+            }
+        }
+        
+        async function testCorsTestEndpoint() {
+            try {
+                const response = await fetch('https://school-report-saas.onrender.com/cors-test/', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                const data = await response.json();
+                addResult(
+                    '✅ CORS Test Endpoint', 
+                    `<strong>Status:</strong> ${response.status}<br>
+                     <strong>Data:</strong><pre>${JSON.stringify(data, null, 2)}</pre>`,
+                    'success'
+                );
+                return true;
+            } catch (error) {
+                addResult(
+                    '❌ CORS Test Endpoint Failed', 
+                    `<strong>Error:</strong> ${error.message}`,
+                    'error'
+                );
+                return false;
+            }
+        }
+        
+        async function testTeachersEndpoint() {
+            try {
+                const response = await fetch('https://school-report-saas.onrender.com/api/teachers/', {
+                    method: 'OPTIONS',
+                    mode: 'cors',
+                    headers: {
+                        'Origin': 'https://elitetechreport.netlify.app',
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'content-type,authorization'
+                    }
+                });
+                
+                addResult(
+                    '🔍 Teachers Endpoint (OPTIONS)', 
+                    `<strong>Status:</strong> ${response.status}<br>
+                     <strong>CORS Headers:</strong><br>
+                     ${[...response.headers.entries()]
+                         .filter(([key]) => key.includes('access-control'))
+                         .map(([key, value]) => `${key}: ${value}`)
+                         .join('<br>')}</strong>`,
+                    response.status < 400 ? 'success' : 'error'
+                );
+            } catch (error) {
+                addResult(
+                    '❌ Teachers Endpoint Failed', 
+                    `<strong>Error:</strong> ${error.message}<br>
+                     <strong>This is likely the root cause of your issue!</strong>`,
+                    'error'
+                );
+            }
+        }
+        
+        async function testBackupTeachersEndpoint() {
+            try {
+                const response = await fetch('https://school-report-saas.onrender.com/api/teachers/cors/', {
+                    method: 'OPTIONS',
+                    mode: 'cors'
+                });
+                
+                addResult(
+                    '🆘 Backup Teachers Endpoint', 
+                    `<strong>Status:</strong> ${response.status}<br>
+                     <strong>CORS Headers:</strong><br>
+                     ${[...response.headers.entries()]
+                         .filter(([key]) => key.includes('access-control'))
+                         .map(([key, value]) => `${key}: ${value}`)
+                         .join('<br>')}</strong>`,
+                    response.status < 400 ? 'success' : 'info'
+                );
+            } catch (error) {
+                addResult(
+                    '❌ Backup Endpoint Also Failed', 
+                    `<strong>Error:</strong> ${error.message}`,
+                    'error'
+                );
+            }
+        }
+        
+        async function testServerHealth() {
+            addResult('📊 Server Health Check', 'Testing server responsiveness...', 'info');
+            
+            const startTime = Date.now();
+            try {
+                const response = await fetch('https://school-report-saas.onrender.com/api/', {
+                    method: 'GET'
+                });
+                const endTime = Date.now();
+                const responseTime = endTime - startTime;
+                
+                addResult(
+                    '📈 Server Performance', 
+                    `<strong>Response Time:</strong> ${responseTime}ms<br>
+                     <strong>Status:</strong> ${response.status}<br>
+                     <strong>Server Health:</strong> ${responseTime < 1000 ? 'Good' : 'Slow'}`,
+                    responseTime < 1000 ? 'success' : 'info'
+                );
+            } catch (error) {
+                addResult(
+                    '💥 Server Health Failed', 
+                    `<strong>Error:</strong> ${error.message}<br>
+                     <strong>This suggests the backend is completely down!</strong>`,
+                    'error'
+                );
+            }
+        }
+        
+        async function testAll() {
+            clearResults();
+            addResult('🚀 Starting Diagnostic Tests...', 'Running comprehensive backend connectivity tests', 'info');
+            
+            await testServerHealth();
+            await testBackendRoot();
+            await testCorsTestEndpoint();
+            await testTeachersEndpoint();
+            await testBackupTeachersEndpoint();
+            
+            addResult('📋 Diagnosis Complete', 
+                'Review the results above. If all tests fail, your backend is down. ' +
+                'If only the teachers endpoint fails, it\'s a CORS/routing issue.', 
+                'info'
+            );
+        }
+        
+        // Run tests automatically on load
+        window.onload = function() {
+            setTimeout(testAll, 1000);
+        };
+    </script>
+</body>
+</html>

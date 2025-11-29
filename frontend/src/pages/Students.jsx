@@ -31,23 +31,68 @@ export default function Students() {
   const isTablet = window.innerWidth <= 1024
   const isSmallMobile = window.innerWidth <= 480
 
-  // Enhanced mobile keyboard handling
+  // Enhanced mobile keyboard handling with comprehensive viewport management
   useEffect(() => {
     if (showAdd && window.innerWidth <= 768) {
-      // Prevent background scroll
+      // Store original scroll position
       const scrollY = window.scrollY
+      
+      // Prevent background scroll with better positioning
       document.body.style.position = 'fixed'
       document.body.style.top = `-${scrollY}px`
+      document.body.style.left = '0'
+      document.body.style.right = '0'
       document.body.style.width = '100%'
       document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none' // Prevent pull-to-refresh
       
-      // Handle viewport height changes (keyboard appearance)
-      const handleResize = () => {
+      // Enhanced viewport height handling for mobile keyboards
+      const setViewportHeight = () => {
         const vh = window.innerHeight * 0.01
         document.documentElement.style.setProperty('--vh', `${vh}px`)
+        // Also set a safe area for notched devices
+        document.documentElement.style.setProperty('--safe-area-inset-top', 'env(safe-area-inset-top, 0px)')
+        document.documentElement.style.setProperty('--safe-area-inset-bottom', 'env(safe-area-inset-bottom, 0px)')
       }
       
-      handleResize()
+      setViewportHeight()
+      
+      // Listen for viewport changes (keyboard appearance/disappearance)
+      const handleResize = () => {
+        setViewportHeight()
+        // Dispatch custom event for form components to adjust
+        window.dispatchEvent(new CustomEvent('viewportHeightChange', {
+          detail: { innerHeight: window.innerHeight }
+        }))
+      }
+      
+      const handleOrientationChange = () => {
+        // Delay to ensure orientation change is complete
+        setTimeout(() => {
+          setViewportHeight()
+        }, 100)
+      }
+      
+      window.addEventListener('resize', handleResize, { passive: true })
+      window.addEventListener('orientationchange', handleOrientationChange)
+      
+      return () => {
+        // Restore original scroll position and styles
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.left = ''
+        document.body.style.right = ''
+        document.body.style.width = ''
+        document.body.style.overflow = ''
+        document.body.style.touchAction = ''
+        
+        window.scrollTo(0, scrollY)
+        
+        window.removeEventListener('resize', handleResize)
+        window.removeEventListener('orientationchange', handleOrientationChange)
+      }
+    }
+  }, [showAdd])
       window.addEventListener('resize', handleResize)
       window.addEventListener('orientationchange', handleResize)
       
@@ -56,12 +101,15 @@ export default function Students() {
         const scrollY = document.body.style.top
         document.body.style.position = ''
         document.body.style.top = ''
+        document.body.style.left = ''
+        document.body.style.right = ''
         document.body.style.width = ''
         document.body.style.overflow = ''
+        document.body.style.touchAction = ''
         window.scrollTo(0, parseInt(scrollY || '0') * -1)
         
         window.removeEventListener('resize', handleResize)
-        window.removeEventListener('orientationchange', handleResize)
+        window.removeEventListener('orientationchange', handleOrientationChange)
       }
     }
   }, [showAdd])
@@ -601,30 +649,51 @@ export default function Students() {
             display: 'flex',
             alignItems: window.innerWidth <= 768 ? 'stretch' : 'center',
             justifyContent: 'center',
-            padding: window.innerWidth <= 768 ? '0' : '16px',
+            padding: window.innerWidth <= 375 ? '0' : 
+                     window.innerWidth <= 480 ? '8px' :
+                     window.innerWidth <= 768 ? '12px' : '16px',
             background: 'rgba(0, 0, 0, 0.8)',
             backdropFilter: 'blur(12px)',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            // Enhanced viewport handling for mobile devices
+            minHeight: window.innerWidth <= 768 ? '100vh' : 'auto',
+            maxHeight: window.innerWidth <= 768 ? '100vh' : 'none'
           }}
         >
           <div 
             className="modal-content" 
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: window.innerWidth <= 768 ? '100%' : '90%',
-              height: window.innerWidth <= 768 ? '100%' : 'auto',
-              maxWidth: window.innerWidth <= 768 ? 'none' : '800px',
+              // Responsive width system
+              width: window.innerWidth <= 375 ? '100%' :
+                     window.innerWidth <= 480 ? '100%' :
+                     window.innerWidth <= 768 ? '100%' :
+                     window.innerWidth <= 1024 ? '95%' :
+                     '90%',
+              // Responsive height system
+              height: window.innerWidth <= 768 ? '100vh' : 'auto',
+              // Responsive max dimensions
+              maxWidth: window.innerWidth <= 768 ? 'none' : 
+                       window.innerWidth <= 1024 ? '750px' : '850px',
               maxHeight: window.innerWidth <= 768 ? 'none' : '95vh',
-              background: window.innerWidth <= 768 ? 'rgba(15, 23, 42, 1)' : 'rgba(15, 23, 42, 0.95)',
+              // Enhanced background for different screen sizes
+              background: window.innerWidth <= 375 ? 'rgba(15, 23, 42, 1)' :
+                         window.innerWidth <= 768 ? 'rgba(15, 23, 42, 0.98)' :
+                         'rgba(15, 23, 42, 0.95)',
+              // Responsive borders and radius
               border: window.innerWidth <= 768 ? 'none' : '1px solid rgba(59, 130, 246, 0.3)',
-              borderRadius: window.innerWidth <= 768 ? 0 : 12,
+              borderRadius: window.innerWidth <= 480 ? 0 :
+                           window.innerWidth <= 768 ? '8px' : 12,
               backdropFilter: 'blur(20px)',
               color: 'white',
               overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
               position: 'relative',
-              margin: window.innerWidth <= 768 ? '0' : 'auto'
+              margin: window.innerWidth <= 768 ? '0' : 'auto',
+              // Safe area support for notched devices
+              paddingTop: window.innerWidth <= 480 ? 'env(safe-area-inset-top, 0px)' : '0',
+              paddingBottom: window.innerWidth <= 480 ? 'env(safe-area-inset-bottom, 0px)' : '0'
             }}
           >
             <div 
@@ -633,9 +702,13 @@ export default function Students() {
                 flexShrink: 0,
                 background: 'linear-gradient(135deg, #059669, #047857)',
                 color: 'white',
-                padding: window.innerWidth <= 768 ? '20px 20px 16px' : '20px 24px',
+                // Responsive padding system
+                padding: window.innerWidth <= 375 ? '16px 16px 14px' :
+                        window.innerWidth <= 480 ? '18px 18px 15px' :
+                        window.innerWidth <= 768 ? '20px 20px 16px' : '20px 24px',
                 margin: window.innerWidth <= 768 ? '0' : '-20px -24px 0 -24px',
-                borderRadius: window.innerWidth <= 768 ? 0 : '12px 12px 0 0',
+                borderRadius: window.innerWidth <= 480 ? 0 :
+                             window.innerWidth <= 768 ? '8px 8px 0 0' : '12px 12px 0 0',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -647,14 +720,21 @@ export default function Students() {
             >
               <h3 style={{
                 margin: 0, 
-                fontSize: window.innerWidth <= 768 ? '18px' : '20px', 
+                // Responsive font sizes
+                fontSize: window.innerWidth <= 375 ? '16px' :
+                         window.innerWidth <= 480 ? '17px' :
+                         window.innerWidth <= 768 ? '18px' : '20px', 
                 fontWeight: '700',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px'
+                gap: window.innerWidth <= 480 ? '8px' : '10px'
               }}>
-                <FaUserGraduate style={{fontSize: window.innerWidth <= 768 ? '18px' : '22px'}}/>
-                Add New Student
+                <FaUserGraduate style={{
+                  fontSize: window.innerWidth <= 375 ? '16px' :
+                           window.innerWidth <= 480 ? '17px' :
+                           window.innerWidth <= 768 ? '18px' : '22px'
+                }}/>
+                {window.innerWidth <= 375 ? 'Add Student' : 'Add New Student'}
               </h3>
               <button 
                 onClick={() => setShowAdd(false)}
@@ -662,15 +742,24 @@ export default function Students() {
                   background: 'rgba(255, 255, 255, 0.15)',
                   border: '2px solid rgba(255, 255, 255, 0.2)',
                   color: 'white',
-                  width: window.innerWidth <= 768 ? '40px' : '36px',
-                  height: window.innerWidth <= 768 ? '40px' : '36px',
-                  borderRadius: window.innerWidth <= 768 ? '10px' : '8px',
+                  // Enhanced mobile touch targets
+                  width: window.innerWidth <= 375 ? '44px' :
+                         window.innerWidth <= 480 ? '42px' :
+                         window.innerWidth <= 768 ? '40px' : '36px',
+                  height: window.innerWidth <= 375 ? '44px' :
+                          window.innerWidth <= 480 ? '42px' :
+                          window.innerWidth <= 768 ? '40px' : '36px',
+                  borderRadius: window.innerWidth <= 768 ? '12px' : '8px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  fontSize: window.innerWidth <= 768 ? '16px' : '18px',
-                  transition: 'all 0.3s ease'
+                  fontSize: window.innerWidth <= 375 ? '14px' :
+                           window.innerWidth <= 480 ? '15px' :
+                           window.innerWidth <= 768 ? '16px' : '18px',
+                  transition: 'all 0.3s ease',
+                  // Better touch feedback
+                  WebkitTapHighlightColor: 'transparent'
                 }}
               >
                 <FaTimes/>
@@ -683,48 +772,67 @@ export default function Students() {
                 flex: 1,
                 overflowY: 'auto',
                 overflowX: 'hidden',
-                padding: window.innerWidth <= 768 ? '16px 20px 20px' : '20px 24px',
+                // Responsive padding system
+                padding: window.innerWidth <= 375 ? '12px 16px 16px' :
+                        window.innerWidth <= 480 ? '14px 18px 18px' :
+                        window.innerWidth <= 768 ? '16px 20px 20px' : '20px 24px',
                 margin: window.innerWidth <= 768 ? '0' : '0 -24px',
                 WebkitOverflowScrolling: 'touch',
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'rgba(59, 130, 246, 0.3) transparent',
                 scrollBehavior: 'smooth',
                 minHeight: window.innerWidth <= 768 ? '0' : 'auto',
-                // Enhanced mobile viewport calculations
-                height: window.innerWidth <= 768 ? {
-                  '--safe-area-inset-top': 'env(safe-area-inset-top, 0px)',
-                  '--safe-area-inset-bottom': 'env(safe-area-inset-bottom, 0px)',
-                  height: 'calc(100vh - var(--safe-area-inset-top, 0px) - var(--safe-area-inset-bottom, 0px) - 160px)'
-                }.height : 'auto',
-                // Better scroll container for mobile
+                // Enhanced mobile viewport calculations with safe area support
                 ...(window.innerWidth <= 768 && {
+                  height: 'calc(100vh - 160px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))',
                   position: 'relative',
-                  paddingBottom: '100px', // Space for sticky footer
-                  marginBottom: '-80px' // Offset to maintain proper footer positioning
-                })
+                  paddingBottom: window.innerWidth <= 375 ? '80px' : '100px',
+                  marginBottom: window.innerWidth <= 375 ? '-60px' : '-80px'
+                }),
+                // Enhanced iOS momentum scrolling
+                '-webkit-overflow-scrolling': 'touch',
+                // Prevent overscroll glow on Android
+                overscrollBehavior: 'contain'
               }}
-              // Enhanced scroll handling for mobile
+              // Enhanced touch handling for better mobile experience
               onTouchStart={(e) => {
                 if (window.innerWidth <= 768) {
-                  // Store initial touch position
-                  e.currentTarget.dataset.touchStartY = e.touches[0].clientY
+                  const scrollContainer = e.currentTarget
+                  scrollContainer.dataset.touchStartY = e.touches[0].clientY
+                  scrollContainer.dataset.touchStartScrollTop = scrollContainer.scrollTop
                 }
               }}
               onTouchMove={(e) => {
                 if (window.innerWidth <= 768) {
                   const scrollContainer = e.currentTarget
                   const touchStartY = parseFloat(scrollContainer.dataset.touchStartY || '0')
+                  const touchStartScrollTop = parseFloat(scrollContainer.dataset.touchStartScrollTop || '0')
                   const touchCurrentY = e.touches[0].clientY
                   const touchDelta = touchCurrentY - touchStartY
                   
-                  // Prevent overscroll bounce on iOS
+                  // Prevent overscroll bounce and rubber banding
                   const isScrollable = scrollContainer.scrollHeight > scrollContainer.clientHeight
-                  const isAtTop = scrollContainer.scrollTop <= 0
-                  const isAtBottom = scrollContainer.scrollTop >= scrollContainer.scrollHeight - scrollContainer.clientHeight
+                  const currentScrollTop = scrollContainer.scrollTop
+                  const maxScrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight
                   
+                  const isAtTop = currentScrollTop <= 0
+                  const isAtBottom = currentScrollTop >= maxScrollTop
+                  
+                  // Prevent overscroll when at boundaries
                   if (!isScrollable || (isAtTop && touchDelta > 0) || (isAtBottom && touchDelta < 0)) {
                     e.preventDefault()
                   }
+                  
+                  // Smooth scroll feedback for better UX
+                  if (isScrollable && !isAtTop && !isAtBottom) {
+                    scrollContainer.style.transform = `translateY(${Math.min(5, Math.max(-5, touchDelta * 0.1))}px)`
+                  }
+                }
+              }}
+              onTouchEnd={(e) => {
+                if (window.innerWidth <= 768) {
+                  // Reset transform after touch
+                  e.currentTarget.style.transform = 'translateY(0px)'
                 }
               }}
             >
