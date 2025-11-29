@@ -526,7 +526,7 @@ export default function Teachers() {
             width: isMobile ? '100vw' : '90%',
             height: isMobile ? '100vh' : 'auto',
             maxWidth: isMobile ? 'none' : '700px',
-            maxHeight: isMobile ? 'none' : '90vh',
+            maxHeight: isMobile ? '100vh' : '90vh',
             background: isMobile ? 'rgba(15, 23, 42, 1)' : 'rgba(15, 23, 42, 0.95)',
             border: isMobile ? 'none' : '1px solid rgba(34, 197, 94, 0.3)',
             borderRadius: isMobile ? 0 : 16,
@@ -621,22 +621,26 @@ export default function Teachers() {
               </div>
             )}
             
-            <form onSubmit={handleCreate} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <form onSubmit={handleCreate} style={{ 
+              flex: 1, 
+              display: 'flex', 
+              flexDirection: 'column',
+              height: isMobile ? 'calc(100vh - 140px)' : 'auto',
+              overflow: 'hidden'
+            }}>
               <div style={{
                 flex: 1,
                 overflowY: 'auto',
                 overflowX: 'hidden',
-                padding: isMobile ? '24px 20px' : '20px 24px',
-                display: 'grid',
+                padding: isMobile ? '16px 20px' : '20px 24px',
+                display: isMobile ? 'flex' : 'grid',
+                flexDirection: isMobile ? 'column' : 'row',
                 gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-                gap: isMobile ? 20 : 20,
+                gap: isMobile ? 16 : 20,
                 alignContent: 'start',
                 WebkitOverflowScrolling: 'touch',
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'rgba(34, 197, 94, 0.3) transparent',
-                // Add momentum scrolling for iOS
-                '-webkit-overflow-scrolling': 'touch',
-                // Ensure proper scroll behavior
                 scrollBehavior: 'smooth'
               }}>
                 {/* Email Field */}
@@ -689,21 +693,22 @@ export default function Teachers() {
                 <div className="field">
                   <label style={{
                     display: 'block',
-                    marginBottom: 8,
-                    fontSize: 14,
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
                     fontWeight: 600,
-                    color: '#d1d5db'
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
                   }}>
                     First Name <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <div className="input-with-icon" style={{ position: 'relative' }}>
                     <FaUser style={{
                       position: 'absolute',
-                      left: 14,
+                      left: isMobile ? 16 : 14,
                       top: '50%',
                       transform: 'translateY(-50%)',
                       color: '#64748b',
-                      fontSize: 14,
+                      fontSize: isMobile ? 16 : 14,
                       zIndex: 2
                     }} />
                     <input 
@@ -714,14 +719,16 @@ export default function Teachers() {
                       placeholder="Enter first name"
                       style={{
                         width: '100%',
-                        padding: isMobile ? '14px 14px 14px 44px' : '12px 12px 12px 42px',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
                         fontSize: isMobile ? 16 : 15,
-                        border: '1px solid rgba(71, 85, 105, 0.3)',
-                        borderRadius: 8,
-                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
                         color: 'white',
                         outline: 'none',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
                       }}
                     />
                   </div>
@@ -731,21 +738,22 @@ export default function Teachers() {
                 <div className="field">
                   <label style={{
                     display: 'block',
-                    marginBottom: 8,
-                    fontSize: 14,
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
                     fontWeight: 600,
-                    color: '#d1d5db'
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
                   }}>
                     Last Name <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <div className="input-with-icon" style={{ position: 'relative' }}>
                     <FaUser style={{
                       position: 'absolute',
-                      left: 14,
+                      left: isMobile ? 16 : 14,
                       top: '50%',
                       transform: 'translateY(-50%)',
                       color: '#64748b',
-                      fontSize: 14,
+                      fontSize: isMobile ? 16 : 14,
                       zIndex: 2
                     }} />
                     <input 
@@ -756,14 +764,16 @@ export default function Teachers() {
                       placeholder="Enter last name"
                       style={{
                         width: '100%',
-                        padding: isMobile ? '14px 14px 14px 44px' : '12px 12px 12px 42px',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
                         fontSize: isMobile ? 16 : 15,
-                        border: '1px solid rgba(71, 85, 105, 0.3)',
-                        borderRadius: 8,
-                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
                         color: 'white',
                         outline: 'none',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
                       }}
                     />
                   </div>
@@ -799,21 +809,22 @@ export default function Teachers() {
                 <div className="field">
                   <label style={{
                     display: 'block',
-                    marginBottom: 8,
-                    fontSize: 14,
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
                     fontWeight: 600,
-                    color: '#d1d5db'
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
                   }}>
                     Password <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <div className="input-with-icon" style={{ position: 'relative' }}>
                     <FaLock style={{
                       position: 'absolute',
-                      left: 14,
+                      left: isMobile ? 16 : 14,
                       top: '50%',
                       transform: 'translateY(-50%)',
                       color: '#64748b',
-                      fontSize: 14,
+                      fontSize: isMobile ? 16 : 14,
                       zIndex: 2
                     }} />
                     <input 
@@ -825,14 +836,16 @@ export default function Teachers() {
                       placeholder="Create password"
                       style={{
                         width: '100%',
-                        padding: isMobile ? '14px 14px 14px 44px' : '12px 12px 12px 42px',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
                         fontSize: isMobile ? 16 : 15,
-                        border: '1px solid rgba(71, 85, 105, 0.3)',
-                        borderRadius: 8,
-                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
                         color: 'white',
                         outline: 'none',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
                       }}
                     />
                   </div>
@@ -842,21 +855,22 @@ export default function Teachers() {
                 <div className="field">
                   <label style={{
                     display: 'block',
-                    marginBottom: 8,
-                    fontSize: 14,
+                    marginBottom: isMobile ? 12 : 8,
+                    fontSize: isMobile ? 15 : 14,
                     fontWeight: 600,
-                    color: '#d1d5db'
+                    color: '#e2e8f0',
+                    letterSpacing: '0.025em'
                   }}>
                     Confirm Password <span style={{ color: '#ef4444' }}>*</span>
                   </label>
                   <div className="input-with-icon" style={{ position: 'relative' }}>
                     <FaLock style={{
                       position: 'absolute',
-                      left: 14,
+                      left: isMobile ? 16 : 14,
                       top: '50%',
                       transform: 'translateY(-50%)',
                       color: '#64748b',
-                      fontSize: 14,
+                      fontSize: isMobile ? 16 : 14,
                       zIndex: 2
                     }} />
                     <input 
@@ -868,14 +882,16 @@ export default function Teachers() {
                       placeholder="Confirm password"
                       style={{
                         width: '100%',
-                        padding: isMobile ? '14px 14px 14px 44px' : '12px 12px 12px 42px',
+                        padding: isMobile ? '16px 16px 16px 48px' : '12px 12px 12px 42px',
                         fontSize: isMobile ? 16 : 15,
-                        border: '1px solid rgba(71, 85, 105, 0.3)',
-                        borderRadius: 8,
-                        background: 'rgba(30, 41, 59, 0.8)',
+                        border: '2px solid rgba(71, 85, 105, 0.4)',
+                        borderRadius: isMobile ? 12 : 8,
+                        background: isMobile ? 'rgba(30, 41, 59, 0.9)' : 'rgba(30, 41, 59, 0.8)',
                         color: 'white',
                         outline: 'none',
-                        transition: 'all 0.3s ease'
+                        transition: 'all 0.3s ease',
+                        minHeight: isMobile ? '52px' : 'auto',
+                        boxSizing: 'border-box'
                       }}
                     />
                   </div>
