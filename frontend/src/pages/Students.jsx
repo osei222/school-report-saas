@@ -31,25 +31,38 @@ export default function Students() {
   const isTablet = window.innerWidth <= 1024
   const isSmallMobile = window.innerWidth <= 480
 
-  // Prevent body scroll when modal is open on mobile
+  // Enhanced mobile keyboard handling
   useEffect(() => {
     if (showAdd && window.innerWidth <= 768) {
-      document.body.style.overflow = 'hidden'
+      // Prevent background scroll
+      const scrollY = window.scrollY
       document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
       document.body.style.width = '100%'
-      document.body.style.height = '100%'
-    } else {
-      document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.width = ''
-      document.body.style.height = ''
-    }
-    
-    return () => {
-      document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.width = ''
-      document.body.style.height = ''
+      document.body.style.overflow = 'hidden'
+      
+      // Handle viewport height changes (keyboard appearance)
+      const handleResize = () => {
+        const vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+      }
+      
+      handleResize()
+      window.addEventListener('resize', handleResize)
+      window.addEventListener('orientationchange', handleResize)
+      
+      return () => {
+        // Restore scroll position
+        const scrollY = document.body.style.top
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        document.body.style.overflow = ''
+        window.scrollTo(0, parseInt(scrollY || '0') * -1)
+        
+        window.removeEventListener('resize', handleResize)
+        window.removeEventListener('orientationchange', handleResize)
+      }
     }
   }, [showAdd])
 
@@ -586,7 +599,7 @@ export default function Students() {
             bottom: 0,
             zIndex: 1000,
             display: 'flex',
-            alignItems: window.innerWidth <= 768 ? 'flex-start' : 'center',
+            alignItems: window.innerWidth <= 768 ? 'stretch' : 'center',
             justifyContent: 'center',
             padding: window.innerWidth <= 768 ? '0' : '16px',
             background: 'rgba(0, 0, 0, 0.8)',
@@ -598,10 +611,10 @@ export default function Students() {
             className="modal-content" 
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: window.innerWidth <= 768 ? '100vw' : '90%',
-              height: window.innerWidth <= 768 ? '100vh' : 'auto',
+              width: window.innerWidth <= 768 ? '100%' : '90%',
+              height: window.innerWidth <= 768 ? '100%' : 'auto',
               maxWidth: window.innerWidth <= 768 ? 'none' : '800px',
-              maxHeight: window.innerWidth <= 768 ? '100vh' : '90vh',
+              maxHeight: window.innerWidth <= 768 ? 'none' : '95vh',
               background: window.innerWidth <= 768 ? 'rgba(15, 23, 42, 1)' : 'rgba(15, 23, 42, 0.95)',
               border: window.innerWidth <= 768 ? 'none' : '1px solid rgba(59, 130, 246, 0.3)',
               borderRadius: window.innerWidth <= 768 ? 0 : 12,
@@ -610,7 +623,8 @@ export default function Students() {
               overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
-              position: 'relative'
+              position: 'relative',
+              margin: window.innerWidth <= 768 ? '0' : 'auto'
             }}
           >
             <div 
@@ -664,18 +678,54 @@ export default function Students() {
             </div>
             
             <div 
+              className="scroll-container"
               style={{
                 flex: 1,
                 overflowY: 'auto',
                 overflowX: 'hidden',
-                padding: window.innerWidth <= 768 ? '16px 20px 120px' : '20px 24px',
+                padding: window.innerWidth <= 768 ? '16px 20px 20px' : '20px 24px',
                 margin: window.innerWidth <= 768 ? '0' : '0 -24px',
                 WebkitOverflowScrolling: 'touch',
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'rgba(59, 130, 246, 0.3) transparent',
                 scrollBehavior: 'smooth',
-                height: window.innerWidth <= 768 ? 'calc(100vh - 140px)' : 'auto',
-                minHeight: window.innerWidth <= 768 ? 'calc(100vh - 140px)' : 'auto'
+                minHeight: window.innerWidth <= 768 ? '0' : 'auto',
+                // Enhanced mobile viewport calculations
+                height: window.innerWidth <= 768 ? {
+                  '--safe-area-inset-top': 'env(safe-area-inset-top, 0px)',
+                  '--safe-area-inset-bottom': 'env(safe-area-inset-bottom, 0px)',
+                  height: 'calc(100vh - var(--safe-area-inset-top, 0px) - var(--safe-area-inset-bottom, 0px) - 160px)'
+                }.height : 'auto',
+                // Better scroll container for mobile
+                ...(window.innerWidth <= 768 && {
+                  position: 'relative',
+                  paddingBottom: '100px', // Space for sticky footer
+                  marginBottom: '-80px' // Offset to maintain proper footer positioning
+                })
+              }}
+              // Enhanced scroll handling for mobile
+              onTouchStart={(e) => {
+                if (window.innerWidth <= 768) {
+                  // Store initial touch position
+                  e.currentTarget.dataset.touchStartY = e.touches[0].clientY
+                }
+              }}
+              onTouchMove={(e) => {
+                if (window.innerWidth <= 768) {
+                  const scrollContainer = e.currentTarget
+                  const touchStartY = parseFloat(scrollContainer.dataset.touchStartY || '0')
+                  const touchCurrentY = e.touches[0].clientY
+                  const touchDelta = touchCurrentY - touchStartY
+                  
+                  // Prevent overscroll bounce on iOS
+                  const isScrollable = scrollContainer.scrollHeight > scrollContainer.clientHeight
+                  const isAtTop = scrollContainer.scrollTop <= 0
+                  const isAtBottom = scrollContainer.scrollTop >= scrollContainer.scrollHeight - scrollContainer.clientHeight
+                  
+                  if (!isScrollable || (isAtTop && touchDelta > 0) || (isAtBottom && touchDelta < 0)) {
+                    e.preventDefault()
+                  }
+                }
               }}
             >
               <form onSubmit={async (e) => {
@@ -837,7 +887,81 @@ export default function Students() {
                     {error}
                   </div>
                 )}
-                <div className="form add-student-form">
+                <div className="form add-student-form" style={{
+                  '--mobile-input-padding': window.innerWidth <= 768 ? '14px 16px' : '12px 16px',
+                  '--mobile-input-font-size': window.innerWidth <= 768 ? '16px' : '14px',
+                  '--mobile-input-min-height': window.innerWidth <= 768 ? '48px' : '40px'
+                }}>
+                  <style>
+                    {`
+                      .add-student-form input,
+                      .add-student-form select,
+                      .add-student-form textarea {
+                        width: 100%;
+                        padding: var(--mobile-input-padding);
+                        font-size: var(--mobile-input-font-size);
+                        min-height: var(--mobile-input-min-height);
+                        border: 2px solid #d1d5db;
+                        border-radius: 8px;
+                        background: #ffffff;
+                        transition: all 0.2s ease;
+                        outline: none;
+                        box-sizing: border-box;
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        appearance: none;
+                      }
+                      
+                      .add-student-form input:focus,
+                      .add-student-form select:focus,
+                      .add-student-form textarea:focus {
+                        border-color: #3b82f6;
+                        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                      }
+                      
+                      .add-student-form input.error,
+                      .add-student-form select.error,
+                      .add-student-form textarea.error {
+                        border-color: #ef4444;
+                      }
+                      
+                      .add-student-form input.error:focus,
+                      .add-student-form select.error:focus,
+                      .add-student-form textarea.error:focus {
+                        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+                      }
+                      
+                      .field-error {
+                        color: #ef4444;
+                        font-size: 12px;
+                        margin-top: 6px;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                      }
+                      
+                      .form-section h4 {
+                        margin: 10px 0 6px;
+                        color: var(--text);
+                        font-size: 13px;
+                        font-weight: 600;
+                        border-bottom: 1px solid #374151;
+                        padding-bottom: 2px;
+                      }
+                      
+                      @media (max-width: 768px) {
+                        .add-student-form .form-row {
+                          grid-template-columns: 1fr !important;
+                          gap: 16px !important;
+                        }
+                        
+                        .add-student-form .field {
+                          margin-bottom: 20px !important;
+                        }
+                      }
+                    `}
+                  </style>
                   <div className="form-row">
                     <div className="field" style={{ marginBottom: '20px' }}>
                       <label style={{
@@ -853,42 +977,12 @@ export default function Students() {
                           setAddForm(f => ({...f, student_id: e.target.value}))
                           validateField('student_id', e.target.value)
                         }}
-                        style={{
-                          width: '100%',
-                          padding: '12px 16px',
-                          fontSize: '14px',
-                          border: formErrors.student_id ? '2px solid #ef4444' : '2px solid #d1d5db',
-                          borderRadius: '8px',
-                          background: '#ffffff',
-                          transition: 'all 0.2s ease',
-                          outline: 'none',
-                          boxSizing: 'border-box'
-                        }}
-                        onFocus={(e) => {
-                          if (!formErrors.student_id) {
-                            e.target.style.border = '2px solid #3b82f6'
-                            e.target.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)'
-                          }
-                        }}
-                        onBlur={(e) => {
-                          if (!formErrors.student_id) {
-                            e.target.style.border = '2px solid #d1d5db'
-                            e.target.style.boxShadow = 'none'
-                          }
-                        }}
+                        className={formErrors.student_id ? 'error' : ''}
                         placeholder="Enter unique student ID (e.g., 2024001)"
                         required 
                       />
                       {formErrors.student_id && (
-                        <div style={{
-                          color: '#ef4444',
-                          fontSize: '12px',
-                          marginTop: '6px',
-                          fontWeight: '500',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px'
-                        }}>
+                        <div className="field-error">
                           ⚠️ {formErrors.student_id}
                         </div>
                       )}
@@ -1254,16 +1348,21 @@ export default function Students() {
                     flexShrink: 0,
                     padding: window.innerWidth <= 768 ? '16px 20px' : '20px 24px',
                     borderTop: '1px solid #e5e7eb',
-                    background: window.innerWidth <= 768 ? 'rgba(248, 250, 252, 0.95)' : '#f8fafc',
-                    backdropFilter: window.innerWidth <= 768 ? 'blur(10px)' : 'none',
+                    background: window.innerWidth <= 768 ? 'rgba(248, 250, 252, 0.98)' : '#f8fafc',
+                    backdropFilter: window.innerWidth <= 768 ? 'blur(16px)' : 'none',
                     margin: window.innerWidth <= 768 ? '0 -20px -20px -20px' : '0 -24px -20px -24px',
                     borderRadius: window.innerWidth <= 768 ? 0 : '0 0 12px 12px',
                     display: 'flex',
                     gap: '12px',
                     justifyContent: 'flex-end',
-                    position: window.innerWidth <= 768 ? 'sticky' : 'static',
-                    bottom: window.innerWidth <= 768 ? 0 : 'auto',
-                    zIndex: 20
+                    // Enhanced sticky positioning for mobile
+                    ...(window.innerWidth <= 768 && {
+                      position: 'sticky',
+                      bottom: 0,
+                      zIndex: 30,
+                      boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.15)',
+                      borderTop: '2px solid rgba(59, 130, 246, 0.2)'
+                    })
                   }}
                 >
                   <button 

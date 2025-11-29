@@ -631,6 +631,63 @@ input.error:focus, select.error:focus, textarea.error:focus {
 	.container { padding: 0 12px; }
 	.table th, .table td { padding: 8px 10px; font-size: 13px; }
 }
+/* Enhanced mobile modal and form scrolling */
+@media (max-width: 768px) {
+	/* Improved modal scrolling on mobile */
+	.modal {
+		align-items: stretch !important;
+		padding: 0 !important;
+	}
+	
+	.modal-content {
+		width: 100% !important;
+		height: 100% !important;
+		max-height: none !important;
+		border-radius: 0 !important;
+		display: flex !important;
+		flex-direction: column !important;
+	}
+	
+	/* Better form field styling on mobile */
+	.form input, .form select, .form textarea {
+		font-size: 16px !important; /* Prevent zoom on iOS */
+		padding: 14px 16px !important;
+		border-radius: 8px !important;
+		min-height: 48px !important; /* Touch-friendly */
+		-webkit-appearance: none !important;
+		-moz-appearance: none !important;
+		appearance: none !important;
+	}
+	
+	/* Enhanced touch targets */
+	.btn, button, .nav-link, .bottom-nav-item { 
+		min-height: 48px !important;
+		padding: 14px 16px !important;
+	}
+	
+	/* Improved modal header and footer */
+	.modal-header {
+		position: sticky !important;
+		top: 0 !important;
+		z-index: 100 !important;
+		backdrop-filter: blur(16px) !important;
+	}
+	
+	.modal-actions {
+		position: sticky !important;
+		bottom: 0 !important;
+		z-index: 100 !important;
+		backdrop-filter: blur(16px) !important;
+		box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15) !important;
+	}
+	
+	/* Prevent overscroll on modal content */
+	.modal .modal-content .scroll-container {
+		overscroll-behavior: contain !important;
+		-webkit-overflow-scrolling: touch !important;
+	}
+}
+
 @media (max-width: 520px) {
 	.navbar .nav { display: none; }
 	.navbar { justify-content: space-between; }
