@@ -1,0 +1,9 @@
+# Static assets should not be redirected
+/assets/*  /assets/:splat  200!
+/icons/*   /icons/:splat   200!
+/*.js      /:splat         200!
+/*.css     /:splat         200!
+/*.mjs     /:splat         200!
+
+# All other routes go to index.html for SPA
+/*  /index.html  200
