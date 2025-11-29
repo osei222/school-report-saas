@@ -668,13 +668,14 @@ export default function Students() {
                 flex: 1,
                 overflowY: 'auto',
                 overflowX: 'hidden',
-                padding: window.innerWidth <= 768 ? '16px 20px' : '20px 24px',
+                padding: window.innerWidth <= 768 ? '16px 20px 120px' : '20px 24px',
                 margin: window.innerWidth <= 768 ? '0' : '0 -24px',
                 WebkitOverflowScrolling: 'touch',
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'rgba(59, 130, 246, 0.3) transparent',
                 scrollBehavior: 'smooth',
-                height: window.innerWidth <= 768 ? 'calc(100vh - 120px)' : 'auto'
+                height: window.innerWidth <= 768 ? 'calc(100vh - 140px)' : 'auto',
+                minHeight: window.innerWidth <= 768 ? 'calc(100vh - 140px)' : 'auto'
               }}
             >
               <form onSubmit={async (e) => {
@@ -823,7 +824,6 @@ export default function Students() {
                 setSubmitting(false)
               }
             }}>
-              <div className="modal-body">
                 {error && (
                   <div style={{
                     background: 'rgba(239, 68, 68, 0.1)',
@@ -1042,11 +1042,6 @@ export default function Students() {
                         </div>
                       )}
                     </div>
-                        placeholder="Enter last name"
-                        required 
-                      />
-                      {formErrors.last_name && <span className="field-error">{formErrors.last_name}</span>}
-                    </div>
                   </div>
 
                   <div className="form-row">
@@ -1257,14 +1252,18 @@ export default function Students() {
                   className="modal-actions"
                   style={{
                     flexShrink: 0,
-                    padding: '20px 24px',
+                    padding: window.innerWidth <= 768 ? '16px 20px' : '20px 24px',
                     borderTop: '1px solid #e5e7eb',
-                    background: '#f8fafc',
-                    margin: '0 -24px -20px -24px',
-                    borderRadius: '0 0 12px 12px',
+                    background: window.innerWidth <= 768 ? 'rgba(248, 250, 252, 0.95)' : '#f8fafc',
+                    backdropFilter: window.innerWidth <= 768 ? 'blur(10px)' : 'none',
+                    margin: window.innerWidth <= 768 ? '0 -20px -20px -20px' : '0 -24px -20px -24px',
+                    borderRadius: window.innerWidth <= 768 ? 0 : '0 0 12px 12px',
                     display: 'flex',
                     gap: '12px',
-                    justifyContent: 'flex-end'
+                    justifyContent: 'flex-end',
+                    position: window.innerWidth <= 768 ? 'sticky' : 'static',
+                    bottom: window.innerWidth <= 768 ? 0 : 'auto',
+                    zIndex: 20
                   }}
                 >
                   <button 
