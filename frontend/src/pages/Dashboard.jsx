@@ -101,7 +101,11 @@ export default function Dashboard() {
 
   if (user?.role === 'TEACHER') {
     return (
-      <div className="container" style={{ maxWidth: 1400, margin: '0 auto' }}>
+      <div className="container" style={{ 
+        maxWidth: 1400, 
+        margin: '0 auto',
+        paddingTop: window.innerWidth <= 768 ? '80px' : '20px' // Add space for mobile navbar
+      }}>
         {/* Teacher Hero Section */}
         <div style={{
           background: 'linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #5eead4 100%)',
@@ -649,7 +653,8 @@ export default function Dashboard() {
     <div style={{ 
       maxWidth: 1400, 
       margin: '0 auto',
-      padding: isMobile ? '0 16px' : isTablet ? '0 20px' : '0 24px'
+      padding: isMobile ? '0 16px' : isTablet ? '0 20px' : '0 24px',
+      paddingTop: isMobile ? '80px' : '20px' // Add space for mobile navbar
     }}>
       {/* Admin Hero Section */}
       <div style={{
