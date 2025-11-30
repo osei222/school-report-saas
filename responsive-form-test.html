@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Add Student Form - Responsive Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .responsive-test {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .breakpoint-info {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .form-demo {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .form-row {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .field label {
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .field input,
+        .field select {
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        
+        .field input:focus,
+        .field select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-save {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Responsive Breakpoints */
+        
+        /* Small Mobile (≤375px) */
+        @media (max-width: 375px) {
+            body {
+                padding: 0;
+            }
+            
+            .responsive-test {
+                border-radius: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            
+            .field input,
+            .field select {
+                padding: 14px 12px !important;
+                font-size: 16px !important; /* Prevent iOS zoom */
+                border-radius: 8px !important;
+            }
+            
+            .field label {
+                font-size: 13px !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .button-row {
+                flex-direction: column-reverse;
+                gap: 8px;
+            }
+            
+            .btn {
+                width: 100%;
+                min-height: 48px;
+                font-size: 15px;
+            }
+        }
+        
+        /* Mobile (376-480px) */
+        @media (min-width: 376px) and (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            
+            .field input,
+            .field select {
+                padding: 15px 14px !important;
+                font-size: 16px !important;
+            }
+            
+            .button-row {
+                flex-direction: column-reverse;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                min-height: 46px;
+            }
+        }
+        
+        /* Tablet (481-768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr !important;
+                gap: 18px !important;
+            }
+            
+            .field input,
+            .field select {
+                padding: 16px 16px !important;
+                font-size: 15px !important;
+                border-radius: 10px !important;
+            }
+        }
+        
+        /* Desktop (>768px) - Default styles apply */
+        @media (min-width: 769px) {
+            .form-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .current-size {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="current-size" id="sizeDisplay"></div>
+    
+    <div class="responsive-test">
+        <div class="breakpoint-info" id="breakpointInfo">
+            Loading...
+        </div>
+        
+        <div class="form-demo">
+            <div class="form-row">
+                <div class="field">
+                    <label>Student ID *</label>
+                    <input type="text" placeholder="Enter unique student ID (e.g., 2024001)" />
+                </div>
+                <div class="field">
+                    <label>Gender</label>
+                    <select>
+                        <option>👨 Male</option>
+                        <option>👩 Female</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="field">
+                    <label>First Name *</label>
+                    <input type="text" placeholder="Enter student's first name" />
+                </div>
+                <div class="field">
+                    <label>Last Name *</label>
+                    <input type="text" placeholder="Enter student's last name" />
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="field">
+                    <label>Other Names</label>
+                    <input type="text" placeholder="Enter other names (optional)" />
+                </div>
+                <div class="field">
+                    <label>Date of Birth *</label>
+                    <input type="date" />
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="field">
+                    <label>Guardian Name *</label>
+                    <input type="text" placeholder="Enter guardian full name" />
+                </div>
+                <div class="field">
+                    <label>Guardian Phone *</label>
+                    <input type="tel" placeholder="Enter phone number" />
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="field">
+                    <label>Guardian Email</label>
+                    <input type="email" placeholder="Enter email address (optional)" />
+                </div>
+                <div class="field">
+                    <label>Guardian Address *</label>
+                    <input type="text" placeholder="Enter home address" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-row">
+            <button class="btn btn-cancel">Cancel</button>
+            <button class="btn btn-save">Save Student</button>
+        </div>
+    </div>
+
+    <script>
+        function updateBreakpointInfo() {
+            const width = window.innerWidth;
+            const sizeDisplay = document.getElementById('sizeDisplay');
+            const breakpointInfo = document.getElementById('breakpointInfo');
+            
+            sizeDisplay.textContent = `${width}px × ${window.innerHeight}px`;
+            
+            let breakpoint = '';
+            let description = '';
+            
+            if (width <= 375) {
+                breakpoint = '📱 Small Mobile';
+                description = 'Single column, compact spacing, full-width buttons, iOS zoom prevention';
+            } else if (width <= 480) {
+                breakpoint = '📱 Mobile';
+                description = 'Single column, standard spacing, full-width buttons';
+            } else if (width <= 768) {
+                breakpoint = '📱 Tablet';
+                description = 'Single column, comfortable spacing, enhanced touch targets';
+            } else {
+                breakpoint = '💻 Desktop';
+                description = 'Two columns, standard desktop layout';
+            }
+            
+            breakpointInfo.innerHTML = `
+                <div><strong>${breakpoint}</strong> (${width}px)</div>
+                <div style="font-size: 13px; margin-top: 5px; opacity: 0.9;">${description}</div>
+            `;
+        }
+        
+        updateBreakpointInfo();
+        window.addEventListener('resize', updateBreakpointInfo);
+        
+        // Demo interactions
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                console.log('Field focused:', input.placeholder || input.type);
+            });
+        });
+        
+        document.querySelector('.btn-save').addEventListener('click', () => {
+            alert('Form would be submitted with responsive design optimizations!');
+        });
+        
+        document.querySelector('.btn-cancel').addEventListener('click', () => {
+            alert('Form would be cancelled');
+        });
+    </script>
+</body>
+</html>

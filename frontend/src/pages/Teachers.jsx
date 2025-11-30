@@ -129,6 +129,30 @@ export default function Teachers() {
     }
   }
 
+  // Test teacher creation with sample data
+  const testTeacherCreation = async () => {
+    const testData = {
+      email: `test.teacher.${Date.now()}@school.com`,
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'TestPassword123!',
+      password_confirm: 'TestPassword123!',
+      employee_id: `EMP${Date.now()}`,
+      phone_number: '+1234567890',
+      hire_date: new Date().toISOString().split('T')[0],
+      qualification: 'B.Ed Mathematics',
+      experience_years: 5,
+      emergency_contact: 'Jane Doe - +1987654321',
+      address: '123 Teacher Street, Education City',
+      specializations: [],
+      class_id: ''
+    }
+    
+    console.log('Testing teacher creation with data:', testData)
+    setForm(testData)
+    setMessage('Test data filled! Click Create Teacher to test.')
+  }
+
   const handleChange = (e) => {
     const { name, value, type } = e.target
     if (type === 'number') {
@@ -672,9 +696,29 @@ export default function Teachers() {
                   WebkitTextFillColor: 'transparent'
                 }}>Create New Teacher</h3>
               </div>
-              <button 
-                className="btn" 
-                onClick={()=>setShowCreate(false)}
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {process.env.NODE_ENV === 'development' && (
+                  <button 
+                    type="button"
+                    onClick={testTeacherCreation}
+                    style={{
+                      background: 'rgba(59, 130, 246, 0.15)',
+                      border: '2px solid rgba(59, 130, 246, 0.4)',
+                      color: '#93c5fd',
+                      padding: isMobile ? '8px 12px' : '6px 10px',
+                      borderRadius: 8,
+                      fontSize: isMobile ? 14 : 12,
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    Fill Test Data
+                  </button>
+                )}
+                <button 
+                  className="btn" 
+                  onClick={()=>setShowCreate(false)}
                 style={{
                   background: 'rgba(239, 68, 68, 0.15)',
                   border: '2px solid rgba(239, 68, 68, 0.4)',
@@ -694,6 +738,7 @@ export default function Teachers() {
               >
                 ×
               </button>
+              </div>
             </div>
             
             {/* Error and Success Messages */}
