@@ -627,208 +627,138 @@ export default function Students() {
             bottom: 0,
             zIndex: 1000,
             display: 'flex',
-            alignItems: window.innerWidth <= 768 ? 'stretch' : 'center',
+            alignItems: isMobile ? 'flex-start' : 'center',
             justifyContent: 'center',
-            padding: window.innerWidth <= 375 ? '0' : 
-                     window.innerWidth <= 480 ? '8px' :
-                     window.innerWidth <= 768 ? '12px' : '16px',
+            padding: isMobile ? '0' : '16px',
             background: 'rgba(0, 0, 0, 0.8)',
             backdropFilter: 'blur(12px)',
-            overflow: 'hidden',
-            // Enhanced viewport handling for mobile devices
-            minHeight: window.innerWidth <= 768 ? '100vh' : 'auto',
-            maxHeight: window.innerWidth <= 768 ? '100vh' : 'none'
+            overflow: 'hidden'
           }}
         >
           <div 
             className="modal-content" 
             onClick={(e) => e.stopPropagation()}
             style={{
-              // Responsive width system
-              width: window.innerWidth <= 375 ? '100%' :
-                     window.innerWidth <= 480 ? '100%' :
-                     window.innerWidth <= 768 ? '100%' :
-                     window.innerWidth <= 1024 ? '95%' :
-                     '90%',
-              // Responsive height system
-              height: window.innerWidth <= 768 ? '100vh' : 'auto',
-              // Responsive max dimensions
-              maxWidth: window.innerWidth <= 768 ? 'none' : 
-                       window.innerWidth <= 1024 ? '750px' : '850px',
-              maxHeight: window.innerWidth <= 768 ? 'none' : '95vh',
-              // Enhanced background for different screen sizes
-              background: window.innerWidth <= 375 ? 'rgba(15, 23, 42, 1)' :
-                         window.innerWidth <= 768 ? 'rgba(15, 23, 42, 0.98)' :
-                         'rgba(15, 23, 42, 0.95)',
-              // Responsive borders and radius
-              border: window.innerWidth <= 768 ? 'none' : '1px solid rgba(59, 130, 246, 0.3)',
-              borderRadius: window.innerWidth <= 480 ? 0 :
-                           window.innerWidth <= 768 ? '8px' : 12,
+              width: isMobile ? '100vw' : '90%',
+              height: isMobile ? '100vh' : 'auto',
+              maxWidth: isMobile ? 'none' : '700px',
+              maxHeight: isMobile ? '100vh' : '90vh',
+              background: isMobile ? 'rgba(15, 23, 42, 1)' : 'rgba(15, 23, 42, 0.95)',
+              border: isMobile ? 'none' : '1px solid rgba(22, 163, 74, 0.3)',
+              borderRadius: isMobile ? 0 : 16,
               backdropFilter: 'blur(20px)',
               color: 'white',
               overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
-              position: 'relative',
-              margin: window.innerWidth <= 768 ? '0' : 'auto',
-              // Safe area support for notched devices
-              paddingTop: window.innerWidth <= 480 ? 'env(safe-area-inset-top, 0px)' : '0',
-              paddingBottom: window.innerWidth <= 480 ? 'env(safe-area-inset-bottom, 0px)' : '0'
+              position: 'relative'
             }}
           >
             <div 
               className="modal-header"
               style={{
-                flexShrink: 0,
-                background: 'linear-gradient(135deg, #059669, #047857)',
-                color: 'white',
-                // Responsive padding system
-                padding: window.innerWidth <= 375 ? '16px 16px 14px' :
-                        window.innerWidth <= 480 ? '18px 18px 15px' :
-                        window.innerWidth <= 768 ? '20px 20px 16px' : '20px 24px',
-                margin: window.innerWidth <= 768 ? '0' : '-20px -24px 0 -24px',
-                borderRadius: window.innerWidth <= 480 ? 0 :
-                             window.innerWidth <= 768 ? '8px 8px 0 0' : '12px 12px 0 0',
                 display: 'flex',
-                justifyContent: 'space-between',
                 alignItems: 'center',
-                boxShadow: '0 2px 8px rgba(5, 150, 105, 0.3)',
-                position: window.innerWidth <= 768 ? 'sticky' : 'static',
+                justifyContent: 'space-between',
+                padding: isMobile ? '20px 20px 16px' : '20px 24px 16px',
+                borderBottom: '1px solid rgba(71, 85, 105, 0.3)',
+                background: isMobile ? 'linear-gradient(135deg, rgba(22, 163, 74, 0.15), rgba(34, 197, 94, 0.1))' : 'linear-gradient(135deg, rgba(22, 163, 74, 0.1), rgba(34, 197, 94, 0.05))',
+                backdropFilter: 'blur(8px)',
+                position: isMobile ? 'sticky' : 'static',
                 top: 0,
                 zIndex: 10
               }}
             >
-              <h3 style={{
-                margin: 0, 
-                // Responsive font sizes
-                fontSize: window.innerWidth <= 375 ? '16px' :
-                         window.innerWidth <= 480 ? '17px' :
-                         window.innerWidth <= 768 ? '18px' : '20px', 
-                fontWeight: '700',
+              <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: window.innerWidth <= 480 ? '8px' : '10px'
+                gap: 12
               }}>
-                <FaUserGraduate style={{
-                  fontSize: window.innerWidth <= 375 ? '16px' :
-                           window.innerWidth <= 480 ? '17px' :
-                           window.innerWidth <= 768 ? '18px' : '22px'
-                }}/>
-                {window.innerWidth <= 375 ? 'Add Student' : 'Add New Student'}
-              </h3>
+                <div style={{
+                  background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                  borderRadius: 8,
+                  padding: 8,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <FaUserGraduate size={16} color="white" />
+                </div>
+                <h3 style={{
+                  margin: 0,
+                  fontSize: isMobile ? 18 : 20,
+                  fontWeight: 600,
+                  background: 'linear-gradient(135deg, #86efac, #22c55e)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>Create New Student</h3>
+              </div>
               <button 
+                className="btn" 
                 onClick={() => setShowAdd(false)}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.15)',
-                  border: '2px solid rgba(255, 255, 255, 0.2)',
-                  color: 'white',
-                  // Enhanced mobile touch targets
-                  width: window.innerWidth <= 375 ? '44px' :
-                         window.innerWidth <= 480 ? '42px' :
-                         window.innerWidth <= 768 ? '40px' : '36px',
-                  height: window.innerWidth <= 375 ? '44px' :
-                          window.innerWidth <= 480 ? '42px' :
-                          window.innerWidth <= 768 ? '40px' : '36px',
-                  borderRadius: window.innerWidth <= 768 ? '12px' : '8px',
+                  background: 'rgba(239, 68, 68, 0.15)',
+                  border: '2px solid rgba(239, 68, 68, 0.4)',
+                  color: '#fca5a5',
+                  padding: isMobile ? '12px 14px' : '8px 12px',
+                  borderRadius: 10,
+                  fontSize: isMobile ? 18 : 16,
+                  fontWeight: 700,
+                  minHeight: isMobile ? 44 : 'auto',
+                  minWidth: isMobile ? 44 : 'auto',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  cursor: 'pointer',
-                  fontSize: window.innerWidth <= 375 ? '14px' :
-                           window.innerWidth <= 480 ? '15px' :
-                           window.innerWidth <= 768 ? '16px' : '18px',
                   transition: 'all 0.3s ease',
-                  // Better touch feedback
-                  WebkitTapHighlightColor: 'transparent'
+                  cursor: 'pointer'
                 }}
               >
-                <FaTimes/>
+                ×
               </button>
             </div>
             
+            {/* Error and Success Messages */}
+            {error && (
+              <div style={{
+                padding: isMobile ? '16px 20px' : '12px 24px',
+                margin: 0,
+                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1))',
+                border: '2px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: isMobile ? 10 : 8,
+                marginBottom: isMobile ? 16 : 12,
+                marginLeft: isMobile ? 20 : 24,
+                marginRight: isMobile ? 20 : 24,
+                fontSize: isMobile ? 15 : 14,
+                fontWeight: 500,
+                color: '#fca5a5'
+              }}>
+                {error}
+              </div>
+            )}
+
             <div 
-              className="scroll-container"
+              className="modal-body"
               style={{
                 flex: 1,
                 overflowY: 'auto',
-                overflowX: 'hidden',
-                // Responsive padding system
-                padding: window.innerWidth <= 375 ? '12px 16px 16px' :
-                        window.innerWidth <= 480 ? '14px 18px 18px' :
-                        window.innerWidth <= 768 ? '16px 20px 20px' : '20px 24px',
-                margin: window.innerWidth <= 768 ? '0' : '0 -24px',
-                WebkitOverflowScrolling: 'touch',
-                scrollbarWidth: 'thin',
-                scrollbarColor: 'rgba(59, 130, 246, 0.3) transparent',
-                scrollBehavior: 'smooth',
-                minHeight: window.innerWidth <= 768 ? '0' : 'auto',
-                // Enhanced mobile viewport calculations with safe area support
-                ...(window.innerWidth <= 768 && {
-                  height: 'calc(100vh - 160px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))',
-                  position: 'relative',
-                  paddingBottom: window.innerWidth <= 375 ? '80px' : '100px',
-                  marginBottom: window.innerWidth <= 375 ? '-60px' : '-80px'
-                }),
-                // Enhanced iOS momentum scrolling
-                '-webkit-overflow-scrolling': 'touch',
-                // Prevent overscroll glow on Android
-                overscrollBehavior: 'contain'
+                padding: isMobile ? '20px' : '24px'
               }}
-              // Enhanced touch handling for better mobile experience
-              onTouchStart={(e) => {
-                if (window.innerWidth <= 768) {
-                  const scrollContainer = e.currentTarget
-                  scrollContainer.dataset.touchStartY = e.touches[0].clientY
-                  scrollContainer.dataset.touchStartScrollTop = scrollContainer.scrollTop
-                }
-              }}
-              onTouchMove={(e) => {
-                if (window.innerWidth <= 768) {
-                  const scrollContainer = e.currentTarget
-                  const touchStartY = parseFloat(scrollContainer.dataset.touchStartY || '0')
-                  const touchStartScrollTop = parseFloat(scrollContainer.dataset.touchStartScrollTop || '0')
-                  const touchCurrentY = e.touches[0].clientY
-                  const touchDelta = touchCurrentY - touchStartY
+              >
+              <form 
+                onSubmit={async (e) => {
+                  e.preventDefault()
                   
-                  // Prevent overscroll bounce and rubber banding
-                  const isScrollable = scrollContainer.scrollHeight > scrollContainer.clientHeight
-                  const currentScrollTop = scrollContainer.scrollTop
-                  const maxScrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight
+                  // Final validation
+                  const requiredFields = ['student_id', 'first_name', 'last_name', 'date_of_birth', 'guardian_name', 'guardian_phone', 'guardian_address', 'admission_date']
+                  const errors = {}
                   
-                  const isAtTop = currentScrollTop <= 0
-                  const isAtBottom = currentScrollTop >= maxScrollTop
-                  
-                  // Prevent overscroll when at boundaries
-                  if (!isScrollable || (isAtTop && touchDelta > 0) || (isAtBottom && touchDelta < 0)) {
-                    e.preventDefault()
-                  }
-                  
-                  // Smooth scroll feedback for better UX
-                  if (isScrollable && !isAtTop && !isAtBottom) {
-                    scrollContainer.style.transform = `translateY(${Math.min(5, Math.max(-5, touchDelta * 0.1))}px)`
-                  }
-                }
-              }}
-              onTouchEnd={(e) => {
-                if (window.innerWidth <= 768) {
-                  // Reset transform after touch
-                  e.currentTarget.style.transform = 'translateY(0px)'
-                }
-              }}
-            >
-              <form onSubmit={async (e) => {
-              e.preventDefault()
-              
-              // Final validation
-              const requiredFields = ['student_id', 'first_name', 'last_name', 'date_of_birth', 'guardian_name', 'guardian_phone', 'guardian_address', 'admission_date']
-              const errors = {}
-              
-              requiredFields.forEach(field => {
-                const value = addForm[field]
-                if (!value || (typeof value === 'string' && !value.trim())) {
-                  errors[field] = `${field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} is required`
-                }
-              })
+                  requiredFields.forEach(field => {
+                    const value = addForm[field]
+                    if (!value || (typeof value === 'string' && !value.trim())) {
+                      errors[field] = `${field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} is required`
+                    }
+                  })
               
               // Validate email format if provided
               if (addForm.guardian_email && addForm.guardian_email.trim()) {
