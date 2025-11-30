@@ -116,6 +116,19 @@ export default function Teachers() {
     if (showCreate && !classes.length) fetchClasses()
   }, [showCreate])
 
+  // Test API endpoint function
+  const testAPIEndpoint = async () => {
+    try {
+      console.log('Testing API endpoint...')
+      const response = await api.get('/teachers/')
+      console.log('GET /teachers/ successful:', response.data)
+      setMessage('API endpoint is working correctly!')
+    } catch (error) {
+      console.error('API test failed:', error)
+      setError(`API test failed: ${error.message}`)
+    }
+  }
+
   const handleChange = (e) => {
     const { name, value, type } = e.target
     if (type === 'number') {
@@ -154,38 +167,115 @@ export default function Teachers() {
     setMessage('')
     setError('')
     
-    if (form.password !== form.password_confirm) { 
-      setError('Passwords do not match')
-      return 
+    console.log('Form submission started with data:', form)
+    
+    // Enhanced validation
+    const errors = []
+    
+    if (!form.email?.trim()) {
+      errors.push('Email is required')
+    }
+    
+    if (!form.first_name?.trim()) {
+      errors.push('First name is required')
+    }
+    
+    if (!form.last_name?.trim()) {
+      errors.push('Last name is required')
+    }
+    
+    if (!form.password?.trim()) {
+      errors.push('Password is required')
+    }
+    
+    if (form.password !== form.password_confirm) {
+      errors.push('Passwords do not match')
     }
     
     if (!form.hire_date) {
-      setError('Hire date is required')
-      return
+      errors.push('Hire date is required')
     }
 
     if (!form.employee_id?.trim()) {
-      setError('Employee ID is required')
+      errors.push('Employee ID is required')
+    }
+    
+    if (errors.length > 0) {
+      setError(errors.join(', '))
+      console.error('Validation errors:', errors)
       return
     }
     
     setLoading(true)
+    
     try {
-      await api.post('/teachers/', form)
+      // Prepare the data to send
+      const teacherData = {
+        email: form.email.trim(),
+        first_name: form.first_name.trim(),
+        last_name: form.last_name.trim(),
+        password: form.password,
+        employee_id: form.employee_id.trim(),
+        phone_number: form.phone_number?.trim() || '',
+        hire_date: form.hire_date,
+        qualification: form.qualification?.trim() || '',
+        experience_years: parseInt(form.experience_years) || 0,
+        emergency_contact: form.emergency_contact?.trim() || '',
+        address: form.address?.trim() || '',
+        specializations: form.specializations || [],
+        class_id: form.class_id || null
+      }
+      
+      console.log('Sending teacher data:', teacherData)
+      
+      const response = await api.post('/teachers/', teacherData)
+      
+      console.log('Teacher creation successful:', response.data)
+      
       resetForm()
       await load()
-      setMessage('Teacher created successfully')
+      setMessage('Teacher created successfully!')
       setShowCreate(false)
-    } catch (e2) {
-      const data = e2?.response?.data
-      if (typeof data === 'object' && data !== null) {
-        const errors = Object.entries(data).map(([field, messages]) => 
-          `${field}: ${Array.isArray(messages) ? messages[0] : messages}`
-        ).join(', ')
-        setError(errors)
-      } else {
-        setError('Failed to create teacher')
+      
+    } catch (error) {
+      console.error('Teacher creation failed:', error)
+      console.error('Error response:', error?.response)
+      console.error('Error data:', error?.response?.data)
+      
+      let errorMessage = 'Failed to create teacher'
+      
+      if (error?.response?.status === 400) {
+        const errorData = error?.response?.data
+        if (errorData && typeof errorData === 'object') {
+          // Handle field-specific errors
+          const fieldErrors = []
+          Object.entries(errorData).forEach(([field, messages]) => {
+            if (Array.isArray(messages)) {
+              fieldErrors.push(`${field}: ${messages.join(', ')}`)
+            } else if (typeof messages === 'string') {
+              fieldErrors.push(`${field}: ${messages}`)
+            }
+          })
+          if (fieldErrors.length > 0) {
+            errorMessage = fieldErrors.join('\n')
+          }
+        } else if (errorData?.detail) {
+          errorMessage = errorData.detail
+        }
+      } else if (error?.response?.status === 401) {
+        errorMessage = 'Authentication failed. Please login again.'
+      } else if (error?.response?.status === 403) {
+        errorMessage = 'You do not have permission to create teachers.'
+      } else if (error?.response?.status === 500) {
+        errorMessage = 'Server error. Please try again later.'
+      } else if (error?.response?.data?.detail) {
+        errorMessage = error.response.data.detail
+      } else if (error?.message) {
+        errorMessage = error.message
       }
+      
+      setError(errorMessage)
+      
     } finally {
       setLoading(false)
     }
