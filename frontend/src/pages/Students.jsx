@@ -996,6 +996,109 @@ export default function Students() {
                         appearance: none;
                       }
                       
+                      /* Professional Tooltip Styles */
+                      .field-tooltip {
+                        position: relative;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 6px;
+                      }
+                      
+                      .tooltip-trigger {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+                        color: white;
+                        font-size: 11px;
+                        font-weight: 700;
+                        cursor: help;
+                        transition: all 0.3s ease;
+                        border: none;
+                        outline: none;
+                      }
+                      
+                      .tooltip-trigger:hover {
+                        transform: scale(1.1);
+                        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+                      }
+                      
+                      .tooltip-content {
+                        position: absolute;
+                        bottom: calc(100% + 8px);
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(17, 24, 39, 0.95);
+                        color: white;
+                        padding: 12px 16px;
+                        border-radius: 12px;
+                        font-size: 13px;
+                        line-height: 1.5;
+                        white-space: nowrap;
+                        max-width: 280px;
+                        white-space: normal;
+                        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                        backdrop-filter: blur(8px);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        opacity: 0;
+                        visibility: hidden;
+                        transition: all 0.3s ease;
+                        z-index: 1000;
+                        pointer-events: none;
+                      }
+                      
+                      .tooltip-content::after {
+                        content: '';
+                        position: absolute;
+                        top: 100%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        border: 6px solid transparent;
+                        border-top-color: rgba(17, 24, 39, 0.95);
+                      }
+                      
+                      .tooltip-trigger:hover + .tooltip-content,
+                      .tooltip-content:hover {
+                        opacity: 1;
+                        visibility: visible;
+                        pointer-events: auto;
+                      }
+                      
+                      /* Mobile tooltip adjustments */
+                      @media (max-width: 768px) {
+                        .tooltip-content {
+                          position: fixed;
+                          bottom: auto;
+                          top: 50%;
+                          left: 16px;
+                          right: 16px;
+                          transform: translateY(-50%);
+                          max-width: none;
+                          text-align: center;
+                        }
+                        
+                        .tooltip-content::after {
+                          display: none;
+                        }
+                      }
+                      
+                      .field-help {
+                        font-size: 12px;
+                        color: #6b7280;
+                        margin-top: 4px;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                      }
+                      
+                      .field-help svg {
+                        font-size: 10px;
+                        color: #9ca3af;
+                      }
+                      
                       .add-student-form input:focus,
                       .add-student-form select:focus,
                       .add-student-form textarea:focus {
@@ -1048,13 +1151,23 @@ export default function Students() {
                   </style>
                   <div className="form-row">
                     <div className="field" style={{ marginBottom: '20px' }}>
-                      <label style={{
-                        display: 'block',
-                        marginBottom: '8px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        color: '#374151'
-                      }}>Student ID <span style={{color: '#ef4444', fontSize: '16px'}}>*</span></label>
+                      <div className="field-tooltip">
+                        <label style={{
+                          display: 'block',
+                          marginBottom: '8px',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#374151'
+                        }}>Student ID <span style={{color: '#ef4444', fontSize: '16px'}}>*</span></label>
+                        <button type="button" className="tooltip-trigger" tabIndex="-1">?</button>
+                        <div className="tooltip-content">
+                          <strong>Student ID Guidelines:</strong><br/>
+                          • Must be unique across all students<br/>
+                          • Use format: YYYY### (e.g., 2024001)<br/>
+                          • Numbers only, 4-10 characters<br/>
+                          • Cannot be changed after creation
+                        </div>
+                      </div>
                       <input 
                         value={addForm.student_id} 
                         onChange={(e) => {
@@ -1112,13 +1225,23 @@ export default function Students() {
 
                   <div className="form-row">
                     <div className="field" style={{ marginBottom: '20px' }}>
-                      <label style={{
-                        display: 'block',
-                        marginBottom: '8px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        color: '#374151'
-                      }}>First Name <span style={{color: '#ef4444', fontSize: '16px'}}>*</span></label>
+                      <div className="field-tooltip">
+                        <label style={{
+                          display: 'block',
+                          marginBottom: '8px',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#374151'
+                        }}>First Name <span style={{color: '#ef4444', fontSize: '16px'}}>*</span></label>
+                        <button type="button" className="tooltip-trigger" tabIndex="-1">?</button>
+                        <div className="tooltip-content">
+                          <strong>First Name Guidelines:</strong><br/>
+                          • Enter the student's primary first name<br/>
+                          • Use proper capitalization (e.g., John)<br/>
+                          • Letters only, no numbers or symbols<br/>
+                          • 2-30 characters maximum
+                        </div>
+                      </div>
                       <input 
                         value={addForm.first_name} 
                         onChange={(e) => {
@@ -1167,13 +1290,23 @@ export default function Students() {
                     </div>
 
                     <div className="field" style={{ marginBottom: '20px' }}>
-                      <label style={{
-                        display: 'block',
-                        marginBottom: '8px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        color: '#374151'
-                      }}>Last Name <span style={{color: '#ef4444', fontSize: '16px'}}>*</span></label>
+                      <div className="field-tooltip">
+                        <label style={{
+                          display: 'block',
+                          marginBottom: '8px',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#374151'
+                        }}>Last Name <span style={{color: '#ef4444', fontSize: '16px'}}>*</span></label>
+                        <button type="button" className="tooltip-trigger" tabIndex="-1">?</button>
+                        <div className="tooltip-content">
+                          <strong>Last Name Guidelines:</strong><br/>
+                          • Enter the student's family/surname<br/>
+                          • Use proper capitalization (e.g., Smith)<br/>
+                          • Letters only, spaces allowed for compound names<br/>
+                          • 2-30 characters maximum
+                        </div>
+                      </div>
                       <input 
                         value={addForm.last_name} 
                         onChange={(e) => {
