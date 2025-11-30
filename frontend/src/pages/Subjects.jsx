@@ -30,10 +30,6 @@ export default function Subjects() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('ALL')
 
-  // Responsive breakpoints
-  const isMobile = window.innerWidth <= 768
-  const isTablet = window.innerWidth <= 1024
-
   useEffect(() => {
     (async () => {
       try {
@@ -369,16 +365,21 @@ export default function Subjects() {
         
         .subjects-page {
           min-height: 100vh;
+          max-height: 100vh;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
           -webkit-overflow-scrolling: touch;
           overscroll-behavior: contain;
+          overflow-y: auto;
+          overflow-x: hidden;
         }
         
         .subjects-container {
           max-width: 1400px;
           margin: 0 auto;
           padding: 16px;
+          min-height: calc(100vh - 32px);
+          overflow-y: auto;
         }
         
         .subjects-header {
@@ -607,9 +608,30 @@ export default function Subjects() {
           border: 2px solid #e2e8f0;
           border-radius: 12px;
           padding: 16px;
-          max-height: 300px;
+          max-height: 400px;
           overflow-y: auto;
+          overflow-x: hidden;
           -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
+          scrollbar-color: #cbd5e1 #f8fafc;
+        }
+        
+        .checkbox-container::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        .checkbox-container::-webkit-scrollbar-track {
+          background: #f8fafc;
+          border-radius: 4px;
+        }
+        
+        .checkbox-container::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 4px;
+        }
+        
+        .checkbox-container::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
         }
         
         .checkbox-header {
@@ -672,6 +694,36 @@ export default function Subjects() {
           overflow: hidden;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           background: white;
+        }
+        
+        .table-wrapper {
+          overflow-x: auto;
+          overflow-y: visible;
+          border-radius: 12px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
+          scrollbar-color: #cbd5e1 #f8fafc;
+          max-height: 500px;
+          overflow-y: auto;
+        }
+        
+        .table-wrapper::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        .table-wrapper::-webkit-scrollbar-track {
+          background: #f8fafc;
+          border-radius: 4px;
+        }
+        
+        .table-wrapper::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 4px;
+        }
+        
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
         }
         
         .subjects-table th {
@@ -806,8 +858,40 @@ export default function Subjects() {
         }
         
         @media (min-width: 769px) {
+          .subjects-page {
+            padding: 20px;
+            overflow-y: scroll;
+            scrollbar-width: auto;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+          }
+          
+          .subjects-page::-webkit-scrollbar {
+            width: 12px;
+          }
+          
+          .subjects-page::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+          }
+          
+          .subjects-page::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+          }
+          
+          .subjects-page::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+          }
+          
+          .subjects-container {
+            padding: 20px;
+            min-height: auto;
+            overflow-y: visible;
+          }
+          
           .subjects-grid {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
           }
           
           .form-grid {
@@ -817,11 +901,56 @@ export default function Subjects() {
           .search-filter-bar {
             grid-template-columns: 1fr auto;
           }
+          
+          .subjects-card {
+            max-height: none;
+            overflow: visible;
+          }
+          
+          .checkbox-container {
+            max-height: 350px;
+          }
+          
+          .table-wrapper {
+            max-height: 450px;
+          }
         }
         
         @media (min-width: 1200px) {
+          .subjects-container {
+            padding: 24px;
+          }
+          
           .subjects-grid {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+          }
+          
+          .checkbox-container {
+            max-height: 400px;
+          }
+          
+          .table-wrapper {
+            max-height: 500px;
+          }
+        }
+        
+        @media (min-width: 1400px) {
+          .subjects-container {
+            padding: 32px;
+          }
+          
+          .subjects-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 36px;
+          }
+          
+          .checkbox-container {
+            max-height: 450px;
+          }
+          
+          .table-wrapper {
+            max-height: 600px;
           }
         }
         
@@ -991,7 +1120,7 @@ export default function Subjects() {
               </h2>
             </div>
             
-            <div style={{overflowX: 'auto'}}>
+            <div className="table-wrapper">
               <table className="subjects-table">
                 <thead>
                   <tr>
@@ -1027,7 +1156,7 @@ export default function Subjects() {
           </div>
 
           {/* Class Assignment Card */}
-          <div className="subjects-card" style={{gridColumn: isMobile ? '1' : isTablet ? '1 / -1' : 'span 2'}}>
+          <div className="subjects-card" style={{gridColumn: '1 / -1'}}>
             <div className="card-header">
               <FaUsers className="card-icon" />
               <h2 className="card-title">Assign to Classes</h2>
@@ -1202,7 +1331,7 @@ export default function Subjects() {
                 <FaCheck style={{color: '#16a34a'}} />
                 Assigned Subjects ({classAssignments.length})
               </h3>
-              <div style={{overflowX: 'auto'}}>
+              <div className="table-wrapper">
                 <table className="subjects-table">
                   <thead>
                     <tr>
