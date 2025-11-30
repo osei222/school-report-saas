@@ -93,26 +93,6 @@ export default function Students() {
       }
     }
   }, [showAdd])
-      window.addEventListener('resize', handleResize)
-      window.addEventListener('orientationchange', handleResize)
-      
-      return () => {
-        // Restore scroll position
-        const scrollY = document.body.style.top
-        document.body.style.position = ''
-        document.body.style.top = ''
-        document.body.style.left = ''
-        document.body.style.right = ''
-        document.body.style.width = ''
-        document.body.style.overflow = ''
-        document.body.style.touchAction = ''
-        window.scrollTo(0, parseInt(scrollY || '0') * -1)
-        
-        window.removeEventListener('resize', handleResize)
-        window.removeEventListener('orientationchange', handleOrientationChange)
-      }
-    }
-  }, [showAdd])
 
   const teacherClasses = useMemo(() => {
     if (user?.role !== 'TEACHER') return []
